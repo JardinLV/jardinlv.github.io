@@ -169,85 +169,10 @@
     }
 
     .sectionTitle{
-      margin:0 0 18px;
+      margin:0 0 26px;
       font-size:clamp(34px,4.2vw,56px);
       letter-spacing:-0.02em;
       line-height:1.05;
-    }
-
-    /* ✅ FIX: Apple-style intro rail (matches the media cards) */
-    .closerLead{
-      margin:0 0 16px;
-      max-width: 86ch;
-      color: var(--muted);
-      font-size: clamp(16px, 1.3vw, 18px);
-      line-height: 1.55;
-    }
-
-    .closerWrap{ position:relative; margin: 0 0 18px; }
-
-    .closerRail{
-      display:grid;
-      grid-auto-flow:column;
-      grid-auto-columns: clamp(260px, 34vw, 520px);
-      gap:18px;
-      overflow-x:auto;
-      padding: 6px 0 12px;
-      scroll-snap-type:x mandatory;
-      -webkit-overflow-scrolling:touch;
-      scroll-padding-left: 10px;
-      scrollbar-width: thin;
-    }
-
-    .closerRail::-webkit-scrollbar{ height:10px; }
-    .closerRail::-webkit-scrollbar-thumb{
-      background:rgba(0,0,0,.14);
-      border-radius:999px;
-    }
-    .closerRail::-webkit-scrollbar-track{
-      background:rgba(0,0,0,.05);
-      border-radius:999px;
-    }
-
-    .closerCard{
-      scroll-snap-align:start;
-      background: #fff;
-      border: 1px solid rgba(17,17,17,.08);
-      border-radius: var(--tileRadius);
-      box-shadow: 0 18px 48px rgba(0,0,0,.10);
-      padding: 18px 20px;
-      transition: transform .32s var(--easeApple), box-shadow .32s var(--easeApple);
-      will-change: transform;
-    }
-
-    .closerKicker{
-      font-size: 14px;
-      letter-spacing: .10em;
-      text-transform: uppercase;
-      color: rgba(17,17,17,.55);
-      margin: 0 0 10px;
-      font-weight: 700;
-    }
-
-    .closerText{
-      margin: 0;
-      font-size: clamp(18px, 2vw, 28px);
-      line-height: 1.15;
-      letter-spacing: -0.01em;
-      color: rgba(17,17,17,.92);
-      font-weight: 700;
-    }
-
-    .closerText span{
-      font-weight: 500;
-      color: rgba(17,17,17,.78);
-    }
-
-    @media (hover:hover) and (pointer:fine){
-      .closerCard:hover{
-        transform: translateY(-6px);
-        box-shadow: 0 28px 80px rgba(0,0,0,.14);
-      }
     }
 
     /* horizontal media row like Apple cards */
@@ -295,6 +220,7 @@
       will-change: transform;
     }
 
+    /* Full-bleed media */
     .tileMedia{
       position:relative;
       flex:1 1 auto;
@@ -371,10 +297,41 @@
 
     .mediaControl svg{ width:18px; height:18px; fill:rgba(17,17,17,.78); }
 
+    /* ✅ NEW: text-only “emotion tiles” that still use the SAME .tile structure */
+    .tileMedia.isText{
+      display:flex;
+      align-items:flex-end;
+      padding: 22px;
+      background:
+        radial-gradient(1200px 600px at 15% 15%, rgba(0,0,0,.06), transparent 60%),
+        radial-gradient(900px 500px at 85% 30%, rgba(0,0,0,.05), transparent 55%),
+        linear-gradient(180deg, rgba(245,245,247,1), rgba(255,255,255,1));
+    }
+    .tileMedia.isText .textKicker{
+      font-size: 13px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(17,17,17,.55);
+      margin:0 0 10px;
+      font-weight: 800;
+    }
+    .tileMedia.isText .textHeadline{
+      margin:0;
+      font-size: clamp(20px, 2.4vw, 30px);
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+      color: rgba(17,17,17,.92);
+      font-weight: 750;
+    }
+    .tileMedia.isText .textHeadline span{
+      color: rgba(17,17,17,.72);
+      font-weight: 520;
+    }
+
     /* rail wrapper */
     .railWrap{ position:relative; }
 
-    /* REMOVE “gray tray” feel: fades match section bg */
+    /* fades */
     .railFade{
       pointer-events:none;
       position:absolute;
@@ -400,7 +357,7 @@
       );
     }
 
-    /* subtle “shadow floor” instead of gray behind */
+    /* subtle shadow floor */
     .railWrap::before{
       content:"";
       position:absolute;
@@ -414,7 +371,7 @@
       z-index:0;
     }
 
-    /* ===== Rail Progress Dots ===== */
+    /* dots */
     .railProgress{
       margin-top: 14px;
       display:flex;
@@ -445,11 +402,6 @@
         gap: 14px;
         scroll-padding-left: 18px;
       }
-      .closerRail{
-        grid-auto-columns: 90%;
-        gap: 14px;
-        scroll-padding-left: 18px;
-      }
       .railFade{ width: 36px; }
       .tile{ min-height: 380px; }
       .tileBody{ font-size: 17px; }
@@ -461,12 +413,12 @@
 
     @media (prefers-reduced-motion: reduce){
       .heroBg img{ transform:none !important; }
-      .glass, .ctaRow, .tile, .tileMedia img, .tileMedia video, .mediaControl, .closerCard{
+      .glass, .ctaRow, .tile, .tileMedia img, .tileMedia video, .mediaControl{
         transition:none !important;
         transform:none !important;
       }
       .ctaRow{ opacity:1 !important; }
-      .mediaRail, .closerRail{ scroll-behavior:auto; }
+      .mediaRail{ scroll-behavior:auto; }
     }
   </style>
 </head>
@@ -499,7 +451,75 @@
     <div class="sectionInner">
       <h2 class="sectionTitle">Take a closer look.</h2>
 
-          <!-- TILE 1 (photo) -->
+      <div class="railWrap">
+        <div class="railFade left"></div>
+        <div class="railFade right"></div>
+
+        <div class="mediaRail" id="mediaRail" aria-label="Media examples">
+
+          <!-- ✅ ADDED TO THE ROTATION: Emotional tiles (same rail, same tile class) -->
+          <article class="tile">
+            <div class="tileMedia isText">
+              <div>
+                <p class="textKicker">Digital & In-Store Presence</p>
+                <p class="textHeadline">Discovery turns into decision <span>— right when curiosity peaks.</span></p>
+              </div>
+            </div>
+            <div class="tileBody">
+              <strong>Where it lands:</strong> in the moment customers are most open to trying something new.
+            </div>
+          </article>
+
+          <article class="tile">
+            <div class="tileMedia isText">
+              <div>
+                <p class="textKicker">Brand Visibility & Media</p>
+                <p class="textHeadline">Seen beyond the store <span>— remembered long after.</span></p>
+              </div>
+            </div>
+            <div class="tileBody">
+              <strong>What it feels like:</strong> credibility, reach, and “I’ve seen them everywhere.”
+            </div>
+          </article>
+
+          <article class="tile">
+            <div class="tileMedia isText">
+              <div>
+                <p class="textKicker">Digital Marketing Moments</p>
+                <p class="textHeadline">Attention becomes action <span>— curated, never crowded.</span></p>
+              </div>
+            </div>
+            <div class="tileBody">
+              <strong>Customer impact:</strong> guided choices that feel personal, not promotional.
+            </div>
+          </article>
+
+          <article class="tile">
+            <div class="tileMedia isText">
+              <div>
+                <p class="textKicker">Education & Team Experience</p>
+                <p class="textHeadline">Trust is built through people <span>— customers feel belief.</span></p>
+              </div>
+            </div>
+            <div class="tileBody">
+              <strong>Why it wins:</strong> when the team believes in it, customers follow.
+            </div>
+          </article>
+
+          <article class="tile">
+            <div class="tileMedia isText">
+              <div>
+                <p class="textKicker">Product & Promotions</p>
+                <p class="textHeadline">From purchase to preference <span>— built to be taken home.</span></p>
+              </div>
+            </div>
+            <div class="tileBody">
+              <strong>Lasting effect:</strong> not just a sale — a new habit and a remembered brand.
+            </div>
+          </article>
+          <!-- ✅ END emotional tiles -->
+
+          <!-- Existing media tiles -->
           <article class="tile">
             <div class="tileMedia">
               <img src="media/in-store.jpg" alt="In-store photo example" loading="lazy"
@@ -510,7 +530,6 @@
             </div>
           </article>
 
-          <!-- TILE 2 (photo) -->
           <article class="tile">
             <div class="tileMedia">
               <img src="media/display-case.jpg" alt="Display case photo example" loading="lazy"
@@ -521,7 +540,6 @@
             </div>
           </article>
 
-          <!-- TILE 3 (video) -->
           <article class="tile" data-tile="video">
             <div class="tileMedia">
               <video
@@ -547,7 +565,6 @@
             </div>
           </article>
 
-          <!-- TILE 4 (video) -->
           <article class="tile" data-tile="video">
             <div class="tileMedia">
               <video
@@ -573,7 +590,6 @@
             </div>
           </article>
 
-          <!-- TILE 5 (photo) -->
           <article class="tile">
             <div class="tileMedia">
               <img src="media/email-sms.jpg" alt="Email/SMS visual example" loading="lazy"
@@ -583,6 +599,7 @@
               <strong>Email / SMS / Push</strong> shoutouts designed to convert — not just “look nice.”
             </div>
           </article>
+
         </div>
 
         <div class="railProgress" id="railProgress" aria-hidden="true"></div>
@@ -692,7 +709,7 @@
       });
     });
 
-    // Rail Progress Dots
+    // Rail Progress Dots (includes new tiles automatically)
     const rail = document.getElementById('mediaRail');
     const progress = document.getElementById('railProgress');
 
