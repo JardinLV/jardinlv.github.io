@@ -288,6 +288,7 @@
       opacity:0;
       transform: translateY(6px);
       transition: opacity .28s var(--easeApple), transform .28s var(--easeApple);
+      z-index: 5;
     }
 
     .tile.isPlaying .mediaControl{
@@ -297,17 +298,33 @@
 
     .mediaControl svg{ width:18px; height:18px; fill:rgba(17,17,17,.78); }
 
-    /* ✅ NEW: text-only “emotion tiles” that still use the SAME .tile structure */
-    .tileMedia.isText{
+    /* ======================================================
+       ✅ FIX: Unified “editorial overlay” for ALL tiles
+       ====================================================== */
+
+    /* soft vignette so overlay text reads */
+    .tileMedia.hasOverlay::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(900px 520px at 18% 18%, rgba(0,0,0,.00), rgba(0,0,0,.10) 72%),
+        linear-gradient(0deg, rgba(255,255,255,.92) 0%, rgba(255,255,255,0) 60%);
+      opacity: 1;
+      z-index: 2;
+    }
+
+    .tileOverlay{
+      position:absolute;
+      inset:0;
       display:flex;
       align-items:flex-end;
-      padding: 22px;
-      background:
-        radial-gradient(1200px 600px at 15% 15%, rgba(0,0,0,.06), transparent 60%),
-        radial-gradient(900px 500px at 85% 30%, rgba(0,0,0,.05), transparent 55%),
-        linear-gradient(180deg, rgba(245,245,247,1), rgba(255,255,255,1));
+      padding:22px;
+      z-index:3;
     }
-    .tileMedia.isText .textKicker{
+
+    .tileOverlay .textKicker{
       font-size: 13px;
       letter-spacing: .12em;
       text-transform: uppercase;
@@ -315,7 +332,8 @@
       margin:0 0 10px;
       font-weight: 800;
     }
-    .tileMedia.isText .textHeadline{
+
+    .tileOverlay .textHeadline{
       margin:0;
       font-size: clamp(20px, 2.4vw, 30px);
       line-height: 1.12;
@@ -323,9 +341,18 @@
       color: rgba(17,17,17,.92);
       font-weight: 750;
     }
-    .tileMedia.isText .textHeadline span{
+    .tileOverlay .textHeadline span{
       color: rgba(17,17,17,.72);
       font-weight: 520;
+    }
+
+    /* Emotion tiles: keep media height shorter so no giant empty panel */
+    .tile.isEmotion .tileMedia{
+      min-height: 220px;
+      background:
+        radial-gradient(1200px 600px at 15% 15%, rgba(0,0,0,.06), transparent 60%),
+        radial-gradient(900px 500px at 85% 30%, rgba(0,0,0,.05), transparent 55%),
+        linear-gradient(180deg, rgba(245,245,247,1), rgba(255,255,255,1));
     }
 
     /* rail wrapper */
@@ -409,6 +436,7 @@
         opacity:1;
         transform:none;
       }
+      .tile.isEmotion .tileMedia{ min-height: 200px; }
     }
 
     @media (prefers-reduced-motion: reduce){
@@ -457,12 +485,14 @@
 
         <div class="mediaRail" id="mediaRail" aria-label="Media examples">
 
-          <!-- ✅ ADDED TO THE ROTATION: Emotional tiles (same rail, same tile class) -->
-          <article class="tile">
-            <div class="tileMedia isText">
-              <div>
-                <p class="textKicker">Digital & In-Store Presence</p>
-                <p class="textHeadline">Discovery turns into decision <span>— right when curiosity peaks.</span></p>
+          <!-- ✅ FIXED: Emotional tiles now match the same “overlay” layout -->
+          <article class="tile isEmotion">
+            <div class="tileMedia hasOverlay">
+              <div class="tileOverlay">
+                <div>
+                  <p class="textKicker">Digital & In-Store Presence</p>
+                  <p class="textHeadline">Discovery turns into decision <span>— right when curiosity peaks.</span></p>
+                </div>
               </div>
             </div>
             <div class="tileBody">
@@ -470,11 +500,13 @@
             </div>
           </article>
 
-          <article class="tile">
-            <div class="tileMedia isText">
-              <div>
-                <p class="textKicker">Brand Visibility & Media</p>
-                <p class="textHeadline">Seen beyond the store <span>— remembered long after.</span></p>
+          <article class="tile isEmotion">
+            <div class="tileMedia hasOverlay">
+              <div class="tileOverlay">
+                <div>
+                  <p class="textKicker">Brand Visibility & Media</p>
+                  <p class="textHeadline">Seen beyond the store <span>— remembered long after.</span></p>
+                </div>
               </div>
             </div>
             <div class="tileBody">
@@ -482,11 +514,13 @@
             </div>
           </article>
 
-          <article class="tile">
-            <div class="tileMedia isText">
-              <div>
-                <p class="textKicker">Digital Marketing Moments</p>
-                <p class="textHeadline">Attention becomes action <span>— curated, never crowded.</span></p>
+          <article class="tile isEmotion">
+            <div class="tileMedia hasOverlay">
+              <div class="tileOverlay">
+                <div>
+                  <p class="textKicker">Digital Marketing Moments</p>
+                  <p class="textHeadline">Attention becomes action <span>— curated, never crowded.</span></p>
+                </div>
               </div>
             </div>
             <div class="tileBody">
@@ -494,11 +528,13 @@
             </div>
           </article>
 
-          <article class="tile">
-            <div class="tileMedia isText">
-              <div>
-                <p class="textKicker">Education & Team Experience</p>
-                <p class="textHeadline">Trust is built through people <span>— customers feel belief.</span></p>
+          <article class="tile isEmotion">
+            <div class="tileMedia hasOverlay">
+              <div class="tileOverlay">
+                <div>
+                  <p class="textKicker">Education & Team Experience</p>
+                  <p class="textHeadline">Trust is built through people <span>— customers feel belief.</span></p>
+                </div>
               </div>
             </div>
             <div class="tileBody">
@@ -506,20 +542,21 @@
             </div>
           </article>
 
-          <article class="tile">
-            <div class="tileMedia isText">
-              <div>
-                <p class="textKicker">Product & Promotions</p>
-                <p class="textHeadline">From purchase to preference <span>— built to be taken home.</span></p>
+          <article class="tile isEmotion">
+            <div class="tileMedia hasOverlay">
+              <div class="tileOverlay">
+                <div>
+                  <p class="textKicker">Product & Promotions</p>
+                  <p class="textHeadline">From purchase to preference <span>— built to be taken home.</span></p>
+                </div>
               </div>
             </div>
             <div class="tileBody">
               <strong>Lasting effect:</strong> not just a sale — a new habit and a remembered brand.
             </div>
           </article>
-          <!-- ✅ END emotional tiles -->
 
-          <!-- Existing media tiles -->
+          <!-- Existing media tiles (unchanged) -->
           <article class="tile">
             <div class="tileMedia">
               <img src="media/in-store.jpg" alt="In-store photo example" loading="lazy"
