@@ -25,6 +25,9 @@
       /* motion */
       --easeOut: cubic-bezier(.2,.8,.2,1);
       --easeApple: cubic-bezier(.22,.61,.36,1);
+
+      /* LIVE accent */
+      --liveRed: #e11d48;
     }
 
     *{ box-sizing:border-box; }
@@ -504,6 +507,102 @@
       }
     }
 
+    /* ==============================
+       ✅ MARKETING IMPACT CALCULATOR (Apple-clean)
+       ============================== */
+    .impactCard{
+      background:#fff;
+      border:1px solid rgba(17,17,17,.08);
+      border-radius:var(--tileRadius);
+      box-shadow:var(--shadow);
+      padding:18px 18px 16px;
+      overflow:hidden;
+      max-width: 980px;
+    }
+
+    .impactTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:10px;
+    }
+
+    .impactKicker{
+      font-size:13px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color: rgba(17,17,17,.55);
+      font-weight: 850;
+    }
+
+    .livePill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      font-weight:900;
+      letter-spacing:.10em;
+      font-size:12px;
+      text-transform:uppercase;
+      color:#fff;
+      background: var(--liveRed);
+      box-shadow: 0 10px 30px rgba(225,29,72,.22);
+      user-select:none;
+    }
+
+    .liveDot{
+      width:10px;
+      height:10px;
+      border-radius:999px;
+      background:#fff;
+      box-shadow: 0 0 0 0 rgba(255,255,255,.65);
+      animation:pulse 1.15s infinite;
+    }
+
+    @keyframes pulse{
+      0%{ box-shadow: 0 0 0 0 rgba(255,255,255,.65); }
+      70%{ box-shadow: 0 0 0 12px rgba(255,255,255,0); }
+      100%{ box-shadow: 0 0 0 0 rgba(255,255,255,0); }
+    }
+
+    .impactValue{
+      font-size: clamp(44px, 6vw, 84px);
+      font-weight: 950;
+      letter-spacing: -0.04em;
+      line-height: 1.0;
+      color: rgba(17,17,17,.94);
+      font-variant-numeric: tabular-nums;
+      margin: 6px 0 10px;
+    }
+
+    .impactMetaRow{
+      display:flex;
+      justify-content:space-between;
+      align-items:baseline;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+
+    .impactMeta{
+      color: rgba(17,17,17,.62);
+      font-size: 14px;
+      line-height: 1.35;
+      font-weight: 650;
+    }
+    .impactMeta span{
+      color: rgba(17,17,17,.92);
+      font-weight: 850;
+    }
+
+    .impactFine{
+      color: rgba(17,17,17,.52);
+      font-size: 12px;
+      margin-top: 10px;
+      line-height: 1.4;
+    }
+
     /* Mobile */
     @media (max-width: 900px){
       .wideCard{ grid-template-columns: 1fr; }
@@ -526,6 +625,8 @@
       .tileBody{ font-size: 17px; }
       .mediaControl{ opacity:1; transform:none; }
       .tile.isEmotion .tileMedia{ min-height: 210px; }
+      .impactCard{ padding: 16px 14px 14px; }
+      .livePill{ padding: 8px 10px; }
     }
 
     @media (prefers-reduced-motion: reduce){
@@ -535,6 +636,7 @@
         transition:none !important;
         transform:none !important;
       }
+      .liveDot{ animation:none !important; }
       .ctaRow{ opacity:1 !important; }
       .mediaRail{ scroll-behavior:auto; }
     }
@@ -628,15 +730,15 @@
             <div class="tileMedia">
               <div>
                 <p class="textKicker">Product & Promotions</p>
-                <p class="textHeadline">From purchase to preference <span>— built to be taken home.</span></p>
+                <p class="textHeadline">From purchase to preference <span> built to be taken home.</span></p>
               </div>
             </div>
             <div class="tileBody">
-              <strong>Lasting effect:</strong> not just a sale  a new habit and a remembered brand.
+              <strong>Lasting effect:</strong> not just a sale, a new habit and a remembered brand.
             </div>
           </article>
 
-          <!-- ✅ YOUR MEDIA TILES (keep adding more below) -->
+          <!-- ✅ YOUR MEDIA TILES -->
           <article class="tile">
             <div class="tileMedia">
               <img src="media/in-store.jpg" alt="In-store photo example" loading="lazy"
@@ -678,7 +780,7 @@
               </button>
             </div>
             <div class="tileBody">
-              <strong>In-store TV screen</strong> examples that feel modern, polished, and impossible to ignore.
+              <strong>In-store TV screens</strong> examples that feel modern, polished, and impossible to ignore.
             </div>
           </article>
 
@@ -703,7 +805,7 @@
               </button>
             </div>
             <div class="tileBody">
-              <strong>Billboard & marquee</strong> moments built for reach, recall, and bragging rights.
+              <strong>Billboards & marquee</strong> moments built for reach, recall, and bragging rights.
             </div>
           </article>
 
@@ -827,20 +929,18 @@
           <div class="wideBody">
             <p class="wideKicker">Radio</p>
             <h3 class="wideTitle">Radio Ads</h3>
-            <p class="wideDesc">Audio recall that sticks — the kind customers recognize instantly.</p>
+            <p class="wideDesc">Audio recall that sticks, the kind customers recognize instantly.</p>
           </div>
         </article>
       </div>
     </div>
   </section>
 
-   <!-- =========================
-       MARKETING IMPACT COUNTER (NEW)
-       ========================= -->
+  <!-- ✅ MARKETING IMPACT (INSERTED HERE, BEFORE CONTACT) -->
   <section id="impact" class="section">
     <div class="sectionInner">
       <h2 class="sectionTitle">Marketing Impact</h2>
-      <p class="sectionSub">A live, always-growing counter that updates continuously—day or night.</p>
+      <p class="sectionSub">A live, always-growing counter that updates continuously.</p>
 
       <div class="impactCard">
         <div class="impactTop">
@@ -861,7 +961,7 @@
       </div>
     </div>
   </section>
-  
+
   <!-- ===== CONTACT ===== -->
   <section id="contact" class="section">
     <div class="sectionInner">
@@ -1022,6 +1122,67 @@
     setActiveDot();
     rail?.addEventListener('scroll', () => requestAnimationFrame(setActiveDot), { passive:true });
     window.addEventListener('resize', () => { buildDots(); setActiveDot(); });
+
+    /* ==========================
+       ✅ MARKETING IMPACT CALCULATOR LOGIC
+       Base: 312,000
+       Add: 1,200/day continuously
+       Does NOT reset (anchored to a fixed timestamp)
+       ========================== */
+    (function(){
+      const BASE_IMPRESSIONS = 312000;
+      const DAILY_ADD = 1200;
+
+      // Set the anchor once. This is what prevents "reset".
+      // You can change the date/time, but keep it fixed afterward.
+      const ANCHOR_ISO = "2025-12-23T00:00:00-08:00";
+
+      const elValue = document.getElementById("impactValue");
+      const elBase = document.getElementById("impactBase");
+      const elDaily = document.getElementById("impactDaily");
+
+      if (!elValue || !elBase || !elDaily) return;
+
+      elBase.textContent = BASE_IMPRESSIONS.toLocaleString("en-US");
+      elDaily.textContent = DAILY_ADD.toLocaleString("en-US");
+
+      const PER_SECOND = DAILY_ADD / 86400;
+      let currentDisplayed = BASE_IMPRESSIONS;
+
+      function getLiveValue(){
+        const anchor = new Date(ANCHOR_ISO).getTime();
+        const now = Date.now();
+        const secondsElapsed = Math.max(0, (now - anchor) / 1000);
+        return Math.floor(BASE_IMPRESSIONS + secondsElapsed * PER_SECOND);
+      }
+
+      function tweenTo(target){
+        const start = currentDisplayed;
+        const diff = target - start;
+        if (diff === 0) return;
+
+        const duration = 650;
+        const t0 = performance.now();
+
+        function tick(t){
+          const p = Math.min(1, (t - t0) / duration);
+          const eased = 1 - Math.pow(1 - p, 3);
+          const v = Math.floor(start + diff * eased);
+          elValue.textContent = v.toLocaleString("en-US");
+          if (p < 1) requestAnimationFrame(tick);
+          else currentDisplayed = target;
+        }
+        requestAnimationFrame(tick);
+      }
+
+      function loop(){
+        tweenTo(getLiveValue());
+        setTimeout(loop, 1500);
+      }
+
+      elValue.textContent = currentDisplayed.toLocaleString("en-US");
+      loop();
+    })();
   </script>
 
 </body>
