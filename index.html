@@ -155,7 +155,7 @@
     }
 
     /* ==============================
-       PACKAGES: "Take a closer look."
+       PACKAGES
        ============================== */
     .section{
       background:var(--pageBg);
@@ -169,42 +169,26 @@
     }
 
     .sectionTitle{
-      margin:0 0 10px;
+      margin:0 0 26px; /* keeps spacing even without subtext */
       font-size:clamp(34px,4.2vw,56px);
       letter-spacing:-0.02em;
       line-height:1.05;
-    }
-
-    .sectionSub{
-      margin:0 0 26px;
-      max-width:72ch;
-      color:var(--muted);
-      font-size:clamp(16px,1.3vw,18px);
-      line-height:1.5;
     }
 
     /* horizontal media row like Apple cards */
     .mediaRail{
       display:grid;
       grid-auto-flow:column;
-
-      /* Apple-clean: big cards on desktop, thumb-friendly on mobile */
       grid-auto-columns: clamp(280px, 42vw, 560px);
-
       gap:18px;
       overflow-x:auto;
       padding: 8px 0 14px;
       scroll-snap-type:x mandatory;
       -webkit-overflow-scrolling:touch;
-
-      /* makes the rail feel “native” */
       scroll-padding-left: 10px;
-
-      /* hide scrollbar on Firefox; keep on WebKit lightly */
       scrollbar-width: thin;
     }
 
-    /* softer scrollbar (still visible on desktop) */
     .mediaRail::-webkit-scrollbar{ height:10px; }
     .mediaRail::-webkit-scrollbar-thumb{
       background:rgba(0,0,0,.16);
@@ -236,13 +220,13 @@
       will-change: transform;
     }
 
-    /* Full-bleed media (kills the “two-tone tray”) */
+    /* Full-bleed media */
     .tileMedia{
       position:relative;
       flex:1 1 auto;
       min-height:300px;
-      background:transparent; /* key fix */
-      overflow:hidden;        /* keeps media crisp */
+      background:transparent;
+      overflow:hidden;
     }
 
     .tileMedia img,
@@ -251,14 +235,11 @@
       height:100%;
       object-fit:cover;
       display:block;
-
-      /* “media breathe” */
       transform: scale(1);
       transition: transform .6s var(--easeApple);
       will-change: transform;
     }
 
-    /* Caption feels editorial */
     .tileBody{
       padding:18px 22px 22px;
       color:rgba(17,17,17,.85);
@@ -269,7 +250,6 @@
     }
     .tileBody strong{ color:#111; font-weight:700; }
 
-    /* Apple-clean hover (desktop only) */
     @media (hover:hover) and (pointer:fine){
       .tile:hover{
         transform: translateY(-6px);
@@ -280,17 +260,15 @@
       .tile:hover .tileMedia video{
         transform: scale(1.03);
       }
-      /* control stays hidden until hover/interaction */
       .tile:hover .mediaControl{
         opacity:1;
         transform: translateY(0);
       }
     }
 
-    /* Tap feedback (mobile) */
     .tile:active{ transform: translateY(-2px) scale(.99); }
 
-    /* play/pause floating button (Apple-clean: hidden until hover or play) */
+    /* play/pause floating button */
     .mediaControl{
       position:absolute;
       right:16px;
@@ -307,12 +285,11 @@
       cursor:pointer;
       user-select:none;
 
-      opacity:0;                    /* hidden by default */
-      transform: translateY(6px);   /* slight lift-in */
+      opacity:0;
+      transform: translateY(6px);
       transition: opacity .28s var(--easeApple), transform .28s var(--easeApple);
     }
 
-    /* Always show when playing */
     .tile.isPlaying .mediaControl{
       opacity:1;
       transform: translateY(0);
@@ -320,9 +297,10 @@
 
     .mediaControl svg{ width:18px; height:18px; fill:rgba(17,17,17,.78); }
 
-    /* left/right fade edges for rail */
+    /* rail wrapper */
     .railWrap{ position:relative; }
 
+    /* REMOVE “gray tray” feel: fades match section bg */
     .railFade{
       pointer-events:none;
       position:absolute;
@@ -333,35 +311,59 @@
     }
     .railFade.left{
       left:0;
-      background:linear-gradient(90deg, rgba(255,255,255,1), rgba(255,255,255,0));
+      background: linear-gradient(90deg,
+        rgba(255,255,255,1) 0%,
+        rgba(255,255,255,.85) 35%,
+        rgba(255,255,255,0) 100%
+      );
     }
     .railFade.right{
       right:0;
-      background:linear-gradient(270deg, rgba(255,255,255,1), rgba(255,255,255,0));
+      background: linear-gradient(270deg,
+        rgba(255,255,255,1) 0%,
+        rgba(255,255,255,.85) 35%,
+        rgba(255,255,255,0) 100%
+      );
     }
 
-    /* ===== Rail Progress Dots (Apple subtle) ===== */
+    /* subtle “shadow floor” instead of gray behind */
+    .railWrap::before{
+      content:"";
+      position:absolute;
+      left:0;
+      right:0;
+      bottom:-10px;
+      height:26px;
+      pointer-events:none;
+      background: radial-gradient(closest-side, rgba(0,0,0,.10), rgba(0,0,0,0));
+      opacity:.18;
+      z-index:0;
+    }
+
+    /* ===== Rail Progress Dots ===== */
     .railProgress{
       margin-top: 14px;
       display:flex;
       gap:8px;
       align-items:center;
       justify-content:flex-start;
+      position: relative;
+      z-index: 1;
     }
     .dot{
-      width:7px;
-      height:7px;
+      width:6px;
+      height:6px;
       border-radius:999px;
-      background: rgba(17,17,17,.18);
+      background: rgba(17,17,17,.14);
       transform: scale(1);
       transition: transform .25s var(--easeApple), background .25s var(--easeApple);
     }
     .dot.active{
-      background: rgba(17,17,17,.55);
+      background: rgba(17,17,17,.45);
       transform: scale(1.35);
     }
 
-    /* ===== Mobile tuning: “peek” next card ===== */
+    /* Mobile: peek next card + controls always visible */
     @media (max-width: 780px){
       .section{ padding: 56px 18px; }
       .mediaRail{
@@ -373,7 +375,7 @@
       .tile{ min-height: 380px; }
       .tileBody{ font-size: 17px; }
       .mediaControl{
-        opacity:1;               /* always visible on mobile (no hover) */
+        opacity:1;
         transform:none;
       }
     }
@@ -418,7 +420,6 @@
   <section id="packages" class="section">
     <div class="sectionInner">
       <h2 class="sectionTitle">Take a closer look.</h2>
-     .sectionTitle{ margin: 0 0 26px; }
 
       <div class="railWrap">
         <div class="railFade left"></div>
@@ -511,7 +512,6 @@
           </article>
         </div>
 
-        <!-- Rail progress dots -->
         <div class="railProgress" id="railProgress" aria-hidden="true"></div>
       </div>
     </div>
@@ -520,8 +520,8 @@
   <!-- ===== CONTACT ===== -->
   <section id="contact" class="section">
     <div class="sectionInner">
-      <h2 class="sectionTitle" style="font-size:clamp(30px,3.2vw,46px);">Contact</h2>
-      <p class="sectionSub">
+      <h2 class="sectionTitle" style="font-size:clamp(30px,3.2vw,46px); margin-bottom: 10px;">Contact</h2>
+      <p style="margin:0; max-width:72ch; color:rgba(17,17,17,.68); font-size:clamp(16px,1.3vw,18px); line-height:1.5;">
         Add your contact form or email link here.
       </p>
       <div style="height:240px"></div>
@@ -572,7 +572,6 @@
 
     // ==========================
     // VIDEO TILE PLAY/PAUSE UX
-    // + Apple-clean “show control on hover/play”
     // ==========================
     function setControlIcon(btn, isPlaying){
       const play = btn.querySelector('[data-icon="play"]');
@@ -586,19 +585,12 @@
     document.querySelectorAll('[data-tile="video"]').forEach(tile => {
       const video = tile.querySelector('video');
       const btn = tile.querySelector('.mediaControl');
-
       if (!video || !btn) return;
 
       setControlIcon(btn, false);
 
-      // show control if user taps anywhere on the media (mobile nicety)
-      tile.addEventListener('pointerdown', () => {
-        tile.classList.add('userInteracted');
-      }, { passive:true });
-
       btn.addEventListener('click', () => {
         if (video.paused){
-          // pause any other playing videos
           document.querySelectorAll('[data-tile="video"]').forEach(t => {
             const v = t.querySelector('video');
             if (v && v !== video && !v.paused) v.pause();
@@ -630,7 +622,7 @@
     });
 
     // ==========================
-    // Rail Progress Dots (subtle)
+    // Rail Progress Dots
     // ==========================
     const rail = document.getElementById('mediaRail');
     const progress = document.getElementById('railProgress');
@@ -639,7 +631,7 @@
       if (!rail || !progress) return;
       progress.innerHTML = "";
       const tiles = Array.from(rail.querySelectorAll('.tile'));
-      // Keep dots reasonable: show up to 6, otherwise scale down count
+
       const maxDots = 6;
       const step = Math.ceil(tiles.length / maxDots);
       const dotCount = Math.min(maxDots, Math.ceil(tiles.length / step));
@@ -665,9 +657,9 @@
 
     buildDots();
     setActiveDot();
+
     rail?.addEventListener('scroll', () => requestAnimationFrame(setActiveDot), { passive:true });
     window.addEventListener('resize', () => { buildDots(); setActiveDot(); });
-
   </script>
 
 </body>
