@@ -20,10 +20,7 @@
       color: #fff;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
+    a { color: inherit; text-decoration: none; }
 
     /* ===== HERO WRAP ===== */
     .heroWrap {
@@ -128,15 +125,20 @@
     }
 
     .btn {
+      display: inline-flex;            /* FIX: centers text */
+      align-items: center;             /* FIX */
+      justify-content: center;         /* FIX */
       height: 44px;
       padding: 0 18px;
       border-radius: 999px;
       font-weight: 600;
+      line-height: 1;                  /* FIX: prevents vertical drift */
       border: 1px solid rgba(255,255,255,.28);
       background: rgba(255,255,255,.08);
       color: var(--text-invert);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
+      white-space: nowrap;
     }
 
     .btnPrimary {
@@ -160,7 +162,8 @@
   <section class="heroWrap" id="heroWrap">
 
     <div class="heroBg">
-      <img id="heroImg" src="/images/hero.jpg" alt="Jardín background" />
+      <!-- We set the src in JS so it can fallback if your image is still in /hero.jpg -->
+      <img id="heroImg" alt="Jardín background" />
       <div class="heroShade"></div>
     </div>
 
@@ -188,7 +191,15 @@
     <div style="height:900px"></div>
   </section>
 
-  <!-- ===== SCROLL SCRIPT ===== -->
+  <section id="contact" style="background:#fff; color:#111; padding:72px clamp(18px,4vw,56px);">
+    <h2 style="margin:0 0 12px; font-size:34px;">Contact</h2>
+    <p style="max-width:70ch; opacity:.75;">
+      Add your contact form or email link here.
+    </p>
+    <div style="height:400px"></div>
+  </section>
+
+  <!-- ===== SCRIPT ===== -->
   <script>
     const wrap  = document.getElementById('heroWrap');
     const img   = document.getElementById('heroImg');
@@ -196,6 +207,23 @@
     const ctas  = document.getElementById('ctaRow');
 
     const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+
+    // IMAGE PATH FALLBACK (fixes "image not showing")
+    // Tries /images/hero.jpg first, then /hero.jpg
+    const candidateSrcs = ["/images/hero.jpg", "/hero.jpg"];
+    let srcIndex = 0;
+
+    function tryLoadNextSrc() {
+      if (srcIndex >= candidateSrcs.length) return;
+      img.src = candidateSrcs[srcIndex++];
+    }
+
+    img.addEventListener("error", () => {
+      tryLoadNextSrc();
+    });
+
+    // Start loading
+    tryLoadNextSrc();
 
     function onScroll() {
       const rect = wrap.getBoundingClientRect();
