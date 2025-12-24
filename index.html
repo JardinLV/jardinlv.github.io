@@ -603,6 +603,13 @@
       line-height: 1.4;
     }
 
+    /* Hide internal calculation details from visitors */
+.impactMetaRow,
+.impactFine{
+  display:none !important;
+}
+
+
     /* Mobile */
     @media (max-width: 900px){
       .wideCard{ grid-template-columns: 1fr; }
