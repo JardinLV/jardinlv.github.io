@@ -155,7 +155,7 @@
     }
 
     /* ==============================
-       PACKAGES
+       SECTIONS
        ============================== */
     .section{
       background:var(--pageBg);
@@ -175,7 +175,15 @@
       line-height:1.05;
     }
 
-    /* horizontal media row like Apple cards */
+    .sectionSub{
+      margin: -10px 0 26px;
+      max-width: 78ch;
+      color: var(--muted);
+      font-size: clamp(16px, 1.3vw, 18px);
+      line-height: 1.55;
+    }
+
+    /* horizontal media rail (existing) */
     .mediaRail{
       display:grid;
       grid-auto-flow:column;
@@ -220,7 +228,6 @@
       will-change: transform;
     }
 
-    /* Full-bleed media */
     .tileMedia{
       position:relative;
       flex:1 1 auto;
@@ -265,7 +272,6 @@
         transform: translateY(0);
       }
     }
-
     .tile:active{ transform: translateY(-2px) scale(.99); }
 
     /* play/pause floating button */
@@ -298,67 +304,121 @@
 
     .mediaControl svg{ width:18px; height:18px; fill:rgba(17,17,17,.78); }
 
-    /* ======================================================
-       ✅ FIX: Unified “editorial overlay” for ALL tiles
-       ====================================================== */
-
-    /* soft vignette so overlay text reads */
-    .tileMedia.hasOverlay::after{
-      content:"";
-      position:absolute;
-      inset:0;
-      pointer-events:none;
-      background:
-        radial-gradient(900px 520px at 18% 18%, rgba(0,0,0,.00), rgba(0,0,0,.10) 72%),
-        linear-gradient(0deg, rgba(255,255,255,.92) 0%, rgba(255,255,255,0) 60%);
-      opacity: 1;
-      z-index: 2;
+    /* =========================================
+       NEW: Wide video cards (Experiences)
+       ========================================= */
+    .wideRail{
+      display:grid;
+      grid-auto-flow:row;
+      gap:18px;
     }
 
-    .tileOverlay{
-      position:absolute;
-      inset:0;
+    .wideCard{
+      background: var(--cardBg);
+      border: 1px solid var(--cardStroke);
+      border-radius: var(--tileRadius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      display:grid;
+      grid-template-columns: 1.6fr 1fr;
+      min-height: 340px;
+      transition: transform .32s var(--easeApple), box-shadow .32s var(--easeApple), border-color .32s var(--easeApple);
+    }
+
+    .wideMedia{
+      position:relative;
+      background:#000;
+      overflow:hidden;
+      min-height: 300px;
+    }
+
+    .wideMedia video{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      transform: scale(1);
+      transition: transform .6s var(--easeApple);
+    }
+
+    .wideBody{
+      padding:22px 22px 24px;
+      background:#fff;
+      border-left: 1px solid rgba(17,17,17,.06);
       display:flex;
-      align-items:flex-end;
-      padding:22px;
-      z-index:3;
+      flex-direction:column;
+      justify-content:center;
+      gap:10px;
     }
 
-    .tileOverlay .textKicker{
+    .wideKicker{
       font-size: 13px;
-      letter-spacing: .12em;
-      text-transform: uppercase;
+      letter-spacing:.12em;
+      text-transform:uppercase;
       color: rgba(17,17,17,.55);
-      margin:0 0 10px;
-      font-weight: 800;
-    }
-
-    .tileOverlay .textHeadline{
+      font-weight:800;
       margin:0;
-      font-size: clamp(20px, 2.4vw, 30px);
-      line-height: 1.12;
-      letter-spacing: -0.02em;
+    }
+    .wideTitle{
+      font-size: clamp(24px, 3vw, 36px);
+      line-height:1.08;
+      letter-spacing:-0.02em;
+      margin:0;
       color: rgba(17,17,17,.92);
-      font-weight: 750;
+      font-weight:800;
     }
-    .tileOverlay .textHeadline span{
-      color: rgba(17,17,17,.72);
-      font-weight: 520;
-    }
-
-    /* Emotion tiles: keep media height shorter so no giant empty panel */
-    .tile.isEmotion .tileMedia{
-      min-height: 220px;
-      background:
-        radial-gradient(1200px 600px at 15% 15%, rgba(0,0,0,.06), transparent 60%),
-        radial-gradient(900px 500px at 85% 30%, rgba(0,0,0,.05), transparent 55%),
-        linear-gradient(180deg, rgba(245,245,247,1), rgba(255,255,255,1));
+    .wideDesc{
+      margin:0;
+      color: rgba(17,17,17,.74);
+      font-size: 17px;
+      line-height:1.45;
+      max-width: 46ch;
     }
 
-    /* rail wrapper */
+    .wideControl{
+      position:absolute;
+      right:16px;
+      bottom:16px;
+      width:44px;
+      height:44px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.22);
+      background:rgba(255,255,255,.18);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      user-select:none;
+    }
+    .wideControl svg{ width:18px; height:18px; fill:rgba(255,255,255,.92); }
+
+    @media (hover:hover) and (pointer:fine){
+      .wideCard:hover{
+        transform: translateY(-6px);
+        box-shadow: var(--shadowHover);
+        border-color: rgba(17,17,17,.12);
+      }
+      .wideCard:hover .wideMedia video{
+        transform: scale(1.03);
+      }
+    }
+
+    /* Mobile: stack wide cards */
+    @media (max-width: 900px){
+      .wideCard{
+        grid-template-columns: 1fr;
+      }
+      .wideBody{
+        border-left:none;
+        border-top: 1px solid rgba(17,17,17,.06);
+      }
+      .wideMedia{ min-height: 260px; }
+    }
+
+    /* rail wrapper (existing) */
     .railWrap{ position:relative; }
 
-    /* fades */
     .railFade{
       pointer-events:none;
       position:absolute;
@@ -384,7 +444,6 @@
       );
     }
 
-    /* subtle shadow floor */
     .railWrap::before{
       content:"";
       position:absolute;
@@ -421,7 +480,7 @@
       transform: scale(1.35);
     }
 
-    /* Mobile */
+    /* Mobile (existing rail) */
     @media (max-width: 780px){
       .section{ padding: 56px 18px; }
       .mediaRail{
@@ -436,12 +495,11 @@
         opacity:1;
         transform:none;
       }
-      .tile.isEmotion .tileMedia{ min-height: 200px; }
     }
 
     @media (prefers-reduced-motion: reduce){
       .heroBg img{ transform:none !important; }
-      .glass, .ctaRow, .tile, .tileMedia img, .tileMedia video, .mediaControl{
+      .glass, .ctaRow, .tile, .tileMedia img, .tileMedia video, .mediaControl, .wideCard, .wideMedia video{
         transition:none !important;
         transform:none !important;
       }
@@ -468,7 +526,7 @@
 
         <div class="ctaRow" id="ctaRow">
           <a class="btn btnPrimary" href="#packages">View Packages</a>
-          <a class="btn" href="#contact">Request Pricing</a>
+          <a class="btn" href="#experiences">Experiences</a>
         </div>
       </div>
     </div>
@@ -485,78 +543,7 @@
 
         <div class="mediaRail" id="mediaRail" aria-label="Media examples">
 
-          <!-- ✅ FIXED: Emotional tiles now match the same “overlay” layout -->
-          <article class="tile isEmotion">
-            <div class="tileMedia hasOverlay">
-              <div class="tileOverlay">
-                <div>
-                  <p class="textKicker">Digital & In-Store Presence</p>
-                  <p class="textHeadline">Discovery turns into decision <span>— right when curiosity peaks.</span></p>
-                </div>
-              </div>
-            </div>
-            <div class="tileBody">
-              <strong>Where it lands:</strong> in the moment customers are most open to trying something new.
-            </div>
-          </article>
-
-          <article class="tile isEmotion">
-            <div class="tileMedia hasOverlay">
-              <div class="tileOverlay">
-                <div>
-                  <p class="textKicker">Brand Visibility & Media</p>
-                  <p class="textHeadline">Seen beyond the store <span>— remembered long after.</span></p>
-                </div>
-              </div>
-            </div>
-            <div class="tileBody">
-              <strong>What it feels like:</strong> credibility, reach, and “I’ve seen them everywhere.”
-            </div>
-          </article>
-
-          <article class="tile isEmotion">
-            <div class="tileMedia hasOverlay">
-              <div class="tileOverlay">
-                <div>
-                  <p class="textKicker">Digital Marketing Moments</p>
-                  <p class="textHeadline">Attention becomes action <span>— curated, never crowded.</span></p>
-                </div>
-              </div>
-            </div>
-            <div class="tileBody">
-              <strong>Customer impact:</strong> guided choices that feel personal, not promotional.
-            </div>
-          </article>
-
-          <article class="tile isEmotion">
-            <div class="tileMedia hasOverlay">
-              <div class="tileOverlay">
-                <div>
-                  <p class="textKicker">Education & Team Experience</p>
-                  <p class="textHeadline">Trust is built through people <span>— customers feel belief.</span></p>
-                </div>
-              </div>
-            </div>
-            <div class="tileBody">
-              <strong>Why it wins:</strong> when the team believes in it, customers follow.
-            </div>
-          </article>
-
-          <article class="tile isEmotion">
-            <div class="tileMedia hasOverlay">
-              <div class="tileOverlay">
-                <div>
-                  <p class="textKicker">Product & Promotions</p>
-                  <p class="textHeadline">From purchase to preference <span>— built to be taken home.</span></p>
-                </div>
-              </div>
-            </div>
-            <div class="tileBody">
-              <strong>Lasting effect:</strong> not just a sale — a new habit and a remembered brand.
-            </div>
-          </article>
-
-          <!-- Existing media tiles (unchanged) -->
+          <!-- Your existing cards go here (keep whatever you have now) -->
           <article class="tile">
             <div class="tileMedia">
               <img src="media/in-store.jpg" alt="In-store photo example" loading="lazy"
@@ -577,69 +564,134 @@
             </div>
           </article>
 
-          <article class="tile" data-tile="video">
-            <div class="tileMedia">
-              <video
-                src="media/tv-screen.mp4"
-                muted
-                loop
-                playsinline
-                preload="metadata"
-                poster="media/tv-screen-poster.jpg"
-              ></video>
-
-              <button class="mediaControl" type="button" aria-label="Play video">
-                <svg viewBox="0 0 24 24" aria-hidden="true" data-icon="play">
-                  <path d="M8 5v14l12-7z"></path>
-                </svg>
-                <svg viewBox="0 0 24 24" aria-hidden="true" data-icon="pause" style="display:none;">
-                  <path d="M6 5h4v14H6zm8 0h4v14h-4z"></path>
-                </svg>
-              </button>
-            </div>
-            <div class="tileBody">
-              <strong>In-store TV screen</strong> examples that feel modern, polished, and impossible to ignore.
-            </div>
-          </article>
-
-          <article class="tile" data-tile="video">
-            <div class="tileMedia">
-              <video
-                src="media/billboard.mp4"
-                muted
-                loop
-                playsinline
-                preload="metadata"
-                poster="media/billboard-poster.jpg"
-              ></video>
-
-              <button class="mediaControl" type="button" aria-label="Play video">
-                <svg viewBox="0 0 24 24" aria-hidden="true" data-icon="play">
-                  <path d="M8 5v14l12-7z"></path>
-                </svg>
-                <svg viewBox="0 0 24 24" aria-hidden="true" data-icon="pause" style="display:none;">
-                  <path d="M6 5h4v14H6zm8 0h4v14h-4z"></path>
-                </svg>
-              </button>
-            </div>
-            <div class="tileBody">
-              <strong>Billboard & marquee</strong> moments built for reach, recall, and bragging rights.
-            </div>
-          </article>
-
-          <article class="tile">
-            <div class="tileMedia">
-              <img src="media/email-sms.jpg" alt="Email/SMS visual example" loading="lazy"
-                   onerror="this.src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=70';" />
-            </div>
-            <div class="tileBody">
-              <strong>Email / SMS / Push</strong> shoutouts designed to convert — not just “look nice.”
-            </div>
-          </article>
-
         </div>
 
         <div class="railProgress" id="railProgress" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================
+       EXPERIENCES (NEW)
+       ========================= -->
+  <section id="experiences" class="section">
+    <div class="sectionInner">
+      <h2 class="sectionTitle">Experiences</h2>
+      <p class="sectionSub">
+        Real moments customers remember — built for content, community, and culture.
+      </p>
+
+      <div class="wideRail">
+        <!-- Celebrity Budtender Meet & Greets -->
+        <article class="wideCard" data-wide="video">
+          <div class="wideMedia">
+            <video src="media/celebrity-budtender.mp4" muted loop playsinline preload="metadata" poster="media/celebrity-budtender-poster.jpg"></video>
+            <button class="wideControl" type="button" aria-label="Play video">
+              <svg viewBox="0 0 24 24" aria-hidden="true" data-icon="play"><path d="M8 5v14l12-7z"></path></svg>
+              <svg viewBox="0 0 24 24" aria-hidden="true" data-icon="pause" style="display:none;"><path d="M6 5h4v14H6zm8 0h4v14h-4z"></path></svg>
+            </button>
+          </div>
+          <div class="wideBody">
+            <p class="wideKicker">Celebrity Moment</p>
+            <h3 class="wideTitle">Celebrity Budtender Meet & Greets</h3>
+            <p class="wideDesc">High-energy brand moments that feel personal, shareable, and unforgettable.</p>
+          </div>
+        </article>
+
+        <!-- First Friday -->
+        <article class="wideCard" data-wide="video">
+          <div class="wideMedia">
+            <video src="media/first-friday.mp4" muted loop playsinline preload="metadata" poster="media/first-friday-poster.jpg"></video>
+            <button class="wideControl" type="button" aria-label="Play video">
+              <svg viewBox="0 0 24 24" aria-hidden="true" data-icon="play"><path d="M8 5v14l12-7z"></path></svg>
+              <svg viewBox="0 0 24 24" aria-hidden="true" data-icon="pause" style="display:none;"><path d="M6 5h4v14H6zm8 0h4v14h-4z"></path></svg>
+            </button>
+          </div>
+          <div class="wideBody">
+            <p class="wideKicker">Community</p>
+            <h3 class="wideTitle">First Friday</h3>
+            <p class="wideDesc">Culture-forward placement where brands connect with locals and visitors in real time.</p>
+          </div>
+        </article>
+
+        <!-- Concerts -->
+        <article class="wideCard" data-wide="video">
+          <div class="wideMedia">
+            <video src="media/concerts.mp4" muted loop playsinline preload="metadata" poster="media/concerts-poster.jpg"></video>
+            <button class="wideControl" type="button" aria-label="Play video">
+              <svg viewBox="0 0 24 24" aria-hidden="true" data-icon="play"><path d="M8 5v14l12-7z"></path></svg>
+              <svg viewBox="0 0 24 24" aria-hidden="true" data-icon="pause" style="display:none;"><path d="M6 5h4v14H6zm8 0h4v14h-4z"></path></svg>
+            </button>
+          </div>
+          <div class="wideBody">
+            <p class="wideKicker">Energy</p>
+            <h3 class="wideTitle">Concerts</h3>
+            <p class="wideDesc">Brand visibility at volume — moments that travel from the venue to social feeds.</p>
+          </div>
+        </article>
+
+        <!-- MJBizCon After Party -->
+        <article class="wideCard" data-wide="video">
+          <div class="wideMedia">
+            <video src="media/mjbizcon-afterparty.mp4" muted loop playsinline preload="metadata" poster="media/mjbizcon-afterparty-poster.jpg"></video>
+            <button class="wideControl" type="button" aria-label="Play video">
+              <svg viewBox="0 0 24 24" aria-hidden="true" data-icon="play"><path d="M8 5v14l12-7z"></path></svg>
+              <svg viewBox="0 0 24 24" aria-hidden="true" data-icon="pause" style="display:none;"><path d="M6 5h4v14H6zm8 0h4v14h-4z"></path></svg>
+            </button>
+          </div>
+          <div class="wideBody">
+            <p class="wideKicker">Industry</p>
+            <h3 class="wideTitle">MJBizCon After Party</h3>
+            <p class="wideDesc">A premium room for premium brands — where relationships turn into deals.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================
+       ENTERTAINMENT (NEW)
+       ========================= -->
+  <section id="entertainment" class="section">
+    <div class="sectionInner">
+      <h2 class="sectionTitle">Entertainment</h2>
+      <p class="sectionSub">
+        Broadcast-ready media that reinforces credibility and scale.
+      </p>
+
+      <div class="wideRail">
+        <!-- TV Commercials -->
+        <article class="wideCard" data-wide="video">
+          <div class="wideMedia">
+            <video src="media/tv-commercials.mp4" muted loop playsinline preload="metadata" poster="media/tv-commercials-poster.jpg"></video>
+            <button class="wideControl" type="button" aria-label="Play video">
+              <svg viewBox="0 0 24 24" aria-hidden="true" data-icon="play"><path d="M8 5v14l12-7z"></path></svg>
+              <svg viewBox="0 0 24 24" aria-hidden="true" data-icon="pause" style="display:none;"><path d="M6 5h4v14H6zm8 0h4v14h-4z"></path></svg>
+            </button>
+          </div>
+          <div class="wideBody">
+            <p class="wideKicker">TV</p>
+            <h3 class="wideTitle">TV Commercials</h3>
+            <p class="wideDesc">High-production storytelling that makes brands feel established and trusted.</p>
+          </div>
+        </article>
+
+        <!-- Radio Ads -->
+        <article class="wideCard" data-wide="video">
+          <div class="wideMedia">
+            <!-- You can use a video loop for radio (waveform) OR swap to audio later -->
+            <video src="media/radio-ads.mp4" muted loop playsinline preload="metadata" poster="media/radio-ads-poster.jpg"></video>
+            <button class="wideControl" type="button" aria-label="Play video">
+              <svg viewBox="0 0 24 24" aria-hidden="true" data-icon="play"><path d="M8 5v14l12-7z"></path></svg>
+              <svg viewBox="0 0 24 24" aria-hidden="true" data-icon="pause" style="display:none;"><path d="M6 5h4v14H6zm8 0h4v14h-4z"></path></svg>
+            </button>
+          </div>
+          <div class="wideBody">
+            <p class="wideKicker">Radio</p>
+            <h3 class="wideTitle">Radio Ads</h3>
+            <p class="wideDesc">Audio recall that sticks — the kind customers repeat and recognize.</p>
+          </div>
+        </article>
       </div>
     </div>
   </section>
@@ -648,7 +700,7 @@
   <section id="contact" class="section">
     <div class="sectionInner">
       <h2 class="sectionTitle" style="font-size:clamp(30px,3.2vw,46px); margin-bottom: 10px;">Contact</h2>
-      <p style="margin:0; max-width:72ch; color:rgba(17,17,17,.68); font-size:clamp(16px,1.3vw,18px); line-height:1.5;">
+      <p class="sectionSub" style="margin-top:0;">
         Add your contact form or email link here.
       </p>
       <div style="height:240px"></div>
@@ -672,7 +724,6 @@
       if (srcIndex >= candidateSrcs.length) return;
       img.src = candidateSrcs[srcIndex++];
     }
-
     img.addEventListener("error", () => tryLoadNextSrc());
     tryLoadNextSrc();
 
@@ -697,7 +748,9 @@
     window.addEventListener('resize', onScroll);
     onScroll();
 
-    // VIDEO TILE PLAY/PAUSE UX
+    // ==========================
+    // TILE VIDEO PLAY/PAUSE (existing small tiles)
+    // ==========================
     function setControlIcon(btn, isPlaying){
       const play = btn.querySelector('[data-icon="play"]');
       const pause = btn.querySelector('[data-icon="pause"]');
@@ -746,7 +799,36 @@
       });
     });
 
-    // Rail Progress Dots (includes new tiles automatically)
+    // ==========================
+    // WIDE VIDEO CARDS PLAY/PAUSE (Experiences + Entertainment)
+    // ==========================
+    document.querySelectorAll('[data-wide="video"]').forEach(card => {
+      const video = card.querySelector('video');
+      const btn = card.querySelector('.wideControl');
+      if (!video || !btn) return;
+
+      setControlIcon(btn, false);
+
+      btn.addEventListener('click', () => {
+        if (video.paused){
+          // pause all other wide videos
+          document.querySelectorAll('[data-wide="video"] video').forEach(v => {
+            if (v !== video && !v.paused) v.pause();
+          });
+          video.play().then(() => setControlIcon(btn, true)).catch(() => setControlIcon(btn, false));
+        } else {
+          video.pause();
+          setControlIcon(btn, false);
+        }
+      });
+
+      video.addEventListener('pause', () => setControlIcon(btn, false));
+      video.addEventListener('play', () => setControlIcon(btn, true));
+    });
+
+    // ==========================
+    // Rail Progress Dots
+    // ==========================
     const rail = document.getElementById('mediaRail');
     const progress = document.getElementById('railProgress');
 
