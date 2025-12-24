@@ -159,28 +159,32 @@
 <body>
 
   <!-- ===== HERO ===== -->
-  <section class="heroWrap" id="heroWrap">
+<section class="heroWrap" id="heroWrap">
 
-    <div class="heroBg">
-      <!-- We set the src in JS so it can fallback if your image is still in /hero.jpg -->
-      <img id="heroImg" alt="Jardín background" />
-      <div class="heroShade"></div>
-    </div>
+  <div class="heroBg">
+    <img 
+      id="heroImg"
+      src="hero.jpg"
+      alt="Jardín background"
+      loading="eager"
+    />
+    <div class="heroShade"></div>
+  </div>
 
-    <div class="heroContent">
-      <div class="glass" id="glass">
-        <p class="kicker">Marketing Package</p>
-        <h1>Jardín Premium Cannabis Dispensary</h1>
-        <p class="sub">Digital. In-store. Media. Experiences.</p>
+  <div class="heroContent">
+    <div class="glass" id="glass">
+      <p class="kicker">Marketing Package</p>
+      <h1>Jardín Premium Cannabis Dispensary</h1>
+      <p class="sub">Digital. In-store. Media. Experiences.</p>
 
-        <div class="ctaRow" id="ctaRow">
-          <a class="btn btnPrimary" href="#packages">View Packages</a>
-          <a class="btn" href="#contact">Request Pricing</a>
-        </div>
+      <div class="ctaRow" id="ctaRow">
+        <a class="btn btnPrimary" href="#packages">View Packages</a>
+        <a class="btn" href="#contact">Request Pricing</a>
       </div>
     </div>
+  </div>
 
-  </section>
+</section>
 
   <!-- ===== NEXT SECTION ===== -->
   <section id="packages" style="background:#fff; color:#111; padding:72px clamp(18px,4vw,56px);">
