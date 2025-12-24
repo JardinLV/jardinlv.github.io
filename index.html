@@ -169,56 +169,84 @@
     }
 
     .sectionTitle{
-      margin:0 0 18px; /* tightened because we’re adding the narrative block */
+      margin:0 0 18px;
       font-size:clamp(34px,4.2vw,56px);
       letter-spacing:-0.02em;
       line-height:1.05;
     }
 
-    /* ===== NEW: Emotional intro block (Apple-clean) ===== */
+    /* ✅ FIX: Apple-style intro rail (matches the media cards) */
     .closerLead{
-      margin:0 0 18px;
+      margin:0 0 16px;
       max-width: 86ch;
       color: var(--muted);
       font-size: clamp(16px, 1.3vw, 18px);
       line-height: 1.55;
     }
 
-    .closerGrid{
+    .closerWrap{ position:relative; margin: 0 0 18px; }
+
+    .closerRail{
       display:grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap:12px;
-      margin: 0 0 22px;
+      grid-auto-flow:column;
+      grid-auto-columns: clamp(260px, 34vw, 520px);
+      gap:18px;
+      overflow-x:auto;
+      padding: 6px 0 12px;
+      scroll-snap-type:x mandatory;
+      -webkit-overflow-scrolling:touch;
+      scroll-padding-left: 10px;
+      scrollbar-width: thin;
     }
 
-    .closerPill{
-      grid-column: span 6;
-      border: 1px solid rgba(17,17,17,.10);
-      background: rgba(255,255,255,.92);
-      border-radius: 18px;
-      padding: 14px 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.06);
-      transition: transform .25s var(--easeApple), box-shadow .25s var(--easeApple);
+    .closerRail::-webkit-scrollbar{ height:10px; }
+    .closerRail::-webkit-scrollbar-thumb{
+      background:rgba(0,0,0,.14);
+      border-radius:999px;
     }
-    .closerPill strong{
-      display:block;
+    .closerRail::-webkit-scrollbar-track{
+      background:rgba(0,0,0,.05);
+      border-radius:999px;
+    }
+
+    .closerCard{
+      scroll-snap-align:start;
+      background: #fff;
+      border: 1px solid rgba(17,17,17,.08);
+      border-radius: var(--tileRadius);
+      box-shadow: 0 18px 48px rgba(0,0,0,.10);
+      padding: 18px 20px;
+      transition: transform .32s var(--easeApple), box-shadow .32s var(--easeApple);
+      will-change: transform;
+    }
+
+    .closerKicker{
       font-size: 14px;
-      letter-spacing: .06em;
+      letter-spacing: .10em;
       text-transform: uppercase;
-      color: rgba(17,17,17,.70);
-      margin-bottom: 6px;
+      color: rgba(17,17,17,.55);
+      margin: 0 0 10px;
+      font-weight: 700;
     }
-    .closerPill span{
-      display:block;
-      color: rgba(17,17,17,.90);
-      font-size: 16px;
-      line-height: 1.35;
+
+    .closerText{
+      margin: 0;
+      font-size: clamp(18px, 2vw, 28px);
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      color: rgba(17,17,17,.92);
+      font-weight: 700;
+    }
+
+    .closerText span{
+      font-weight: 500;
+      color: rgba(17,17,17,.78);
     }
 
     @media (hover:hover) and (pointer:fine){
-      .closerPill:hover{
-        transform: translateY(-3px);
-        box-shadow: 0 16px 44px rgba(0,0,0,.08);
+      .closerCard:hover{
+        transform: translateY(-6px);
+        box-shadow: 0 28px 80px rgba(0,0,0,.14);
       }
     }
 
@@ -267,7 +295,6 @@
       will-change: transform;
     }
 
-    /* Full-bleed media */
     .tileMedia{
       position:relative;
       flex:1 1 auto;
@@ -410,11 +437,16 @@
       transform: scale(1.35);
     }
 
-    /* Mobile: peek next card + controls always visible */
+    /* Mobile */
     @media (max-width: 780px){
       .section{ padding: 56px 18px; }
       .mediaRail{
         grid-auto-columns: 86%;
+        gap: 14px;
+        scroll-padding-left: 18px;
+      }
+      .closerRail{
+        grid-auto-columns: 90%;
         gap: 14px;
         scroll-padding-left: 18px;
       }
@@ -425,21 +457,16 @@
         opacity:1;
         transform:none;
       }
-
-      /* NEW: emotional grid stacks nicely */
-      .closerGrid{ grid-template-columns: 1fr; }
-      .closerPill{ grid-column: span 12; }
     }
 
-    /* ===== REDUCED MOTION ===== */
     @media (prefers-reduced-motion: reduce){
       .heroBg img{ transform:none !important; }
-      .glass, .ctaRow, .tile, .tileMedia img, .tileMedia video, .mediaControl, .closerPill{
+      .glass, .ctaRow, .tile, .tileMedia img, .tileMedia video, .mediaControl, .closerCard{
         transition:none !important;
         transform:none !important;
       }
       .ctaRow{ opacity:1 !important; }
-      .mediaRail{ scroll-behavior:auto; }
+      .mediaRail, .closerRail{ scroll-behavior:auto; }
     }
   </style>
 </head>
@@ -472,35 +499,39 @@
     <div class="sectionInner">
       <h2 class="sectionTitle">Take a closer look.</h2>
 
-      <!-- ✅ ADDED: Emotional “what it feels like” block -->
+      <!-- ✅ Now matches the Apple “floating card” vibe (like your media tiles) -->
       <p class="closerLead">
-        This is what partnership looks like when it works: discovery feels effortless, the experience feels premium,
-        and customers leave remembering the brand — not just the product.
+        Partnership should feel effortless to the customer — and unmistakable for the brand.
       </p>
 
-      <div class="closerGrid" aria-label="Partnership experience overview">
-        <div class="closerPill">
-          <strong>Digital & In-Store Presence</strong>
-          <span>Where discovery turns into decision — right at the moment curiosity peaks.</span>
-        </div>
-        <div class="closerPill">
-          <strong>Brand Visibility & Media</strong>
-          <span>Seen beyond the store. Remembered long after. Built for reach and recall.</span>
-        </div>
-        <div class="closerPill">
-          <strong>Digital Marketing Moments</strong>
-          <span>Where attention becomes action — curated touchpoints that guide, not crowd.</span>
-        </div>
-        <div class="closerPill">
-          <strong>Education & Team Experience</strong>
-          <span>Trust is built through people — when the team believes in it, customers feel it.</span>
-        </div>
-        <div class="closerPill" style="grid-column: span 12;">
-          <strong>Product & Promotions</strong>
-          <span>Designed to be taken home — mentally and physically. From purchase to preference.</span>
+      <div class="closerWrap">
+        <div class="closerRail" aria-label="Partnership experience">
+          <article class="closerCard">
+            <p class="closerKicker">Digital & In-Store Presence</p>
+            <p class="closerText">Discovery turns into decision <span>— right when curiosity peaks.</span></p>
+          </article>
+
+          <article class="closerCard">
+            <p class="closerKicker">Brand Visibility & Media</p>
+            <p class="closerText">Seen beyond the store <span>— remembered long after.</span></p>
+          </article>
+
+          <article class="closerCard">
+            <p class="closerKicker">Digital Marketing Moments</p>
+            <p class="closerText">Attention becomes action <span>— curated, never crowded.</span></p>
+          </article>
+
+          <article class="closerCard">
+            <p class="closerKicker">Education & Team Experience</p>
+            <p class="closerText">Trust is built through people <span>— customers feel belief.</span></p>
+          </article>
+
+          <article class="closerCard">
+            <p class="closerKicker">Product & Promotions</p>
+            <p class="closerText">From purchase to preference <span>— built to be taken home.</span></p>
+          </article>
         </div>
       </div>
-      <!-- ✅ END ADDED BLOCK -->
 
       <div class="railWrap">
         <div class="railFade left"></div>
@@ -618,7 +649,7 @@
 
     const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
 
-    // IMAGE PATH FALLBACK (tries /images/hero.jpg then /hero.jpg)
+    // IMAGE PATH FALLBACK
     const candidateSrcs = ["/images/hero.jpg", "/hero.jpg"];
     let srcIndex = 0;
 
@@ -651,9 +682,7 @@
     window.addEventListener('resize', onScroll);
     onScroll();
 
-    // ==========================
     // VIDEO TILE PLAY/PAUSE UX
-    // ==========================
     function setControlIcon(btn, isPlaying){
       const play = btn.querySelector('[data-icon="play"]');
       const pause = btn.querySelector('[data-icon="pause"]');
@@ -702,9 +731,7 @@
       });
     });
 
-    // ==========================
     // Rail Progress Dots
-    // ==========================
     const rail = document.getElementById('mediaRail');
     const progress = document.getElementById('railProgress');
 
