@@ -872,12 +872,13 @@
       <article class="wideCard" data-wide="video">
   <div class="wideMedia">
     <iframe
-      src="https://www.youtube.com/embed/HHPrUIa9acc?autoplay=0&mute=1&loop=1&playlist=HHPrUIa9acc&playsinline=1"
+      class="ytAuto"
+      src="https://www.youtube.com/embed/HHPrUIa9acc?enablejsapi=1&playsinline=1&mute=1&controls=0&rel=0"
       title="Concerts Video"
       frameborder="0"
       allow="autoplay; encrypted-media; picture-in-picture"
-      allowfullscreen>
-    </iframe>
+      allowfullscreen
+    ></iframe>
   </div>
 
   <div class="wideBody">
@@ -1192,6 +1193,56 @@
       loop();
     })();
   </script>
+
+  <script>
+  (function () {
+    const iframes = Array.from(document.querySelectorAll("iframe.ytAuto"));
+    if (!iframes.length) return;
+
+    // Helper to send commands to the YouTube player
+    function ytCommand(iframe, func) {
+      if (!iframe || !iframe.contentWindow) return;
+      iframe.contentWindow.postMessage(
+        JSON.stringify({ event: "command", func, args: [] }),
+        "*"
+      );
+    }
+
+    // Make sure the iframe is "ready" and muted (autoplay requires mute on most browsers)
+    function prime(iframe) {
+      ytCommand(iframe, "mute");
+    }
+
+    // Play/pause based on visibility
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const iframe = entry.target;
+
+          if (entry.isIntersecting) {
+            // Prime + play
+            prime(iframe);
+            ytCommand(iframe, "playVideo");
+          } else {
+            ytCommand(iframe, "pauseVideo");
+          }
+        });
+      },
+      {
+        // Tune this: higher = waits until more of the card is visible
+        threshold: 0.55
+      }
+    );
+
+    iframes.forEach((iframe) => observer.observe(iframe));
+
+    // Safety: pause when user switches tabs
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) iframes.forEach((f) => ytCommand(f, "pauseVideo"));
+    });
+  })();
+</script>
+
 
 </body>
 </html>
