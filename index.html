@@ -686,23 +686,14 @@
 
           <!-- ✅ YOUR MEDIA TILES -->
           <article class="tile">
-  <div class="tileMedia tileMediaVideo">
-    <div class="ytWrap">
-      <iframe
-        class="ytPlayer"
-        data-video-id="nU8ysjqK3VI"
-        title="Billboards video"
-        frameborder="0"
-        allow="autoplay; encrypted-media; picture-in-picture"
-        allowfullscreen
-      ></iframe>
-    </div>
-  </div>
-
-  <div class="tileBody">
-    <strong>Billboards</strong> that put your brand everywhere it matters in Las Vegas.
-  </div>
-</article>
+            <div class="tileMedia">
+              <img src="media/in-store.jpg" alt="In-store photo example" loading="lazy"
+                   onerror="this.src='https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&w=1400&q=70';" />
+            </div>
+            <div class="tileBody">
+              <strong>Billboards</strong> that put your brand everywhere it matters in Las Vegas.
+            </div>
+          </article>
 
           <article class="tile">
             <div class="tileMedia">
@@ -1190,68 +1181,6 @@
     });
   })();
 </script>
-
-  // option A
-  <script>
-  (function loadYouTubeAPI() {
-    if (window.YT && window.YT.Player) return;
-    const tag = document.createElement("script");
-    tag.src = "https://www.youtube.com/iframe_api";
-    document.head.appendChild(tag);
-  })();
-
-  const ytPlayers = new Map();
-
-  function buildEmbedUrl(videoId) {
-    const params = new URLSearchParams({
-      playsinline: "1",
-      mute: "1",
-      controls: "0",
-      rel: "0",
-      modestbranding: "1",
-      loop: "1",
-      playlist: videoId,
-      enablejsapi: "1",
-      origin: window.location.origin
-    });
-    return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
-  }
-
-  window.onYouTubeIframeAPIReady = function () {
-    document.querySelectorAll("iframe.ytPlayer").forEach((iframe) => {
-      const videoId = iframe.dataset.videoId;
-      iframe.src = buildEmbedUrl(videoId);
-
-      const player = new YT.Player(iframe, {
-        events: {
-          onReady: (e) => {
-            e.target.mute();
-            e.target.pauseVideo();
-          }
-        }
-      });
-
-      ytPlayers.set(iframe, player);
-    });
-
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const player = ytPlayers.get(entry.target);
-          if (!player) return;
-
-          entry.isIntersecting
-            ? player.playVideo()
-            : player.pauseVideo();
-        });
-      },
-      { threshold: 0.6 }
-    );
-
-    document.querySelectorAll("iframe.ytPlayer").forEach((el) => io.observe(el));
-  };
-</script>
-
 
 
 </body>
