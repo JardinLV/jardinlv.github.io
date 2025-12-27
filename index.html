@@ -81,7 +81,7 @@
 
     /* ===== GLASS PANEL ===== */
     .glass{
-      width:min(980px,100%);
+      width:min(1040px,100%);
       padding:clamp(22px,4vw,44px);
       border-radius:var(--radius);
       color:var(--text-invert);
@@ -157,42 +157,41 @@
       border:none;
     }
 
-    /* ===== NEW: HERO BLURB (Apple-like “scroll reveal”) ===== */
+    /* ==============================
+       ✅ APPLE-LIKE HERO BLURB (BIG TYPE)
+       Appears under buttons while scrolling
+       ============================== */
     .heroBlurb{
-      margin-top: clamp(16px, 2.2vw, 22px);
-      max-width: 72ch;
-      color: rgba(255,255,255,.92);
+      margin-top: clamp(16px, 2.4vw, 24px);
+      padding-top: clamp(14px, 2.2vw, 20px);
+      border-top: 1px solid rgba(255,255,255,.14);
+      max-width: min(46ch, 100%);
       opacity: 0;
-      transform: translateY(14px);
-      transition: opacity .55s var(--easeApple), transform .55s var(--easeApple);
-      pointer-events:none;
+      transform: translateY(18px);
+      transition: opacity .65s var(--easeApple), transform .65s var(--easeApple);
+      will-change: opacity, transform;
     }
+
+    .heroBlurb p{
+      margin: 0;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.12;
+      color: rgba(255,255,255,.94);
+      font-size: clamp(18px, 2.2vw, 30px);
+    }
+
+    .heroBlurb p + p{
+      margin-top: clamp(10px, 1.6vw, 14px);
+      font-weight: 750;
+      color: rgba(255,255,255,.86);
+      font-size: clamp(18px, 2.2vw, 30px);
+    }
+
+    /* When revealed */
     .heroBlurb.show{
       opacity: 1;
       transform: translateY(0);
-    }
-
-    /* This is the “fit the page like Apple” part: bigger, airy, readable */
-    .heroBlurb p{
-      margin: 0;
-      font-size: clamp(18px, 1.7vw, 24px);
-      line-height: 1.45;
-      letter-spacing: -0.01em;
-    }
-    .heroBlurb p + p{
-      margin-top: 10px;
-      opacity: .88;
-    }
-
-    /* Mobile: keep it big but not crowded */
-    @media (max-width: 780px){
-      .heroBlurb{
-        max-width: 44ch;
-      }
-      .heroBlurb p{
-        font-size: clamp(16px, 4.2vw, 19px);
-        line-height: 1.5;
-      }
     }
 
     /* ==============================
@@ -244,18 +243,15 @@
       -webkit-overflow-scrolling: touch;
       overscroll-behavior-x: contain;
 
-      /* makes the first card align nicely */
       scroll-padding-left: 12px;
     }
 
-    /* Apple hides scrollbars */
     .mediaRail::-webkit-scrollbar{ height: 0px; }
     .mediaRail{ scrollbar-width: none; }
 
-    /* Mobile: swipe with peek of next card */
     @media (max-width: 780px){
       .mediaRail{
-        grid-auto-columns: 86%;      /* <-- peek */
+        grid-auto-columns: 86%;
         gap: 14px;
         padding-left: 12px;
         padding-right: 18px;
@@ -284,7 +280,6 @@
       will-change: transform;
     }
 
-    /* Media area */
     .tileMedia{
       position:relative;
       flex:1 1 auto;
@@ -332,7 +327,6 @@
 
     .tile:active{ transform: translateY(-2px) scale(.99); }
 
-    /* play/pause button (small tiles) */
     .mediaControl{
       position:absolute;
       right:16px;
@@ -362,7 +356,6 @@
 
     .mediaControl svg{ width:18px; height:18px; fill:rgba(17,17,17,.78); }
 
-    /* ✅ Emotional tiles style (kept + cleaned) */
     .tile.isEmotion .tileMedia{
       min-height: 240px;
       display:flex;
@@ -394,7 +387,6 @@
       font-weight: 520;
     }
 
-    /* rail wrapper + fades */
     .railWrap{ position:relative; }
 
     .railFade{
@@ -435,7 +427,6 @@
       z-index:0;
     }
 
-    /* dots */
     .railProgress{
       margin-top: 14px;
       display:flex;
@@ -486,13 +477,11 @@
       min-height: 300px;
     }
 
-    .wideMedia video{
+    .wideMedia video, .wideMedia iframe{
       width:100%;
       height:100%;
       object-fit:cover;
       display:block;
-      transform: scale(1);
-      transition: transform .6s var(--easeApple);
     }
 
     .wideBody{
@@ -552,9 +541,6 @@
         transform: translateY(-6px);
         box-shadow: var(--shadowHover);
         border-color: rgba(17,17,17,.12);
-      }
-      .wideCard:hover .wideMedia video{
-        transform: scale(1.03);
       }
     }
 
@@ -654,13 +640,11 @@
       line-height: 1.4;
     }
 
-    /* Hide internal calculation details from visitors */
     .impactMetaRow,
     .impactFine{
       display:none !important;
     }
 
-    /* Mobile */
     @media (max-width: 900px){
       .wideCard{ grid-template-columns: 1fr; }
       .wideBody{
@@ -679,18 +663,28 @@
       .tile.isEmotion .tileMedia{ min-height: 210px; }
       .impactCard{ padding: 16px 14px 14px; }
       .livePill{ padding: 8px 10px; }
+
+      /* Make hero blurb feel Apple-big on phones too */
+      .heroBlurb{
+        max-width: 34ch;
+      }
+      .heroBlurb p,
+      .heroBlurb p + p{
+        font-size: clamp(18px, 4.2vw, 24px);
+        line-height: 1.15;
+      }
     }
 
     @media (prefers-reduced-motion: reduce){
       .heroBg img{ transform:none !important; }
-      .glass, .ctaRow, .heroBlurb, .tile, .tileMedia img, .tileMedia video, .mediaControl,
+      .glass, .ctaRow, .tile, .tileMedia img, .tileMedia video, .mediaControl,
       .wideCard, .wideMedia video{
         transition:none !important;
         transform:none !important;
-        opacity:1 !important;
       }
       .liveDot{ animation:none !important; }
       .ctaRow{ opacity:1 !important; }
+      .heroBlurb{ opacity:1 !important; transform:none !important; }
       .mediaRail{ scroll-behavior:auto; }
     }
   </style>
@@ -716,12 +710,11 @@
           <a class="btn" href="#contact">Contact</a>
         </div>
 
-        <!-- ✅ NEW: scroll-reveal blurb under buttons -->
-        <div class="heroBlurb" id="heroBlurb" aria-hidden="true">
+        <!-- ✅ NEW: Apple-like blurb under buttons -->
+        <div class="heroBlurb" id="heroBlurb" aria-label="Brand blurb">
           <p>Jardín Marketing seamlessly blends physical presence with city-scale visibility.</p>
           <p>So you can place your brand where attention lives, decisions happen, and demand is created.</p>
         </div>
-
       </div>
     </div>
   </section>
@@ -737,7 +730,6 @@
 
         <div class="mediaRail" id="mediaRail" aria-label="Media examples">
 
-          <!-- ✅ YOUR MEDIA TILES -->
           <article class="tile">
             <div class="tileMedia">
               <img
@@ -753,11 +745,9 @@
 
           <article class="tile">
             <div class="tileMedia">
-              <img
-                src="https://www.jardinlasvegas.com/wp-content/uploads/2023/01/6-23-01-juneteenth-1.jpg"
-                alt="Marquee photo example"
-                loading="lazy"
-              />
+              <img src="https://www.jardinlasvegas.com/wp-content/uploads/2023/01/6-23-01-juneteenth-1.jpg"
+                   alt="Display case photo example"
+                   loading="lazy" />
             </div>
             <div class="tileBody">
               <strong>Marquee</strong> designed to influence customers before they reach the parking lot.
@@ -767,9 +757,9 @@
           <article class="tile">
             <div class="tileMedia">
               <img src="media/email-sms.jpg"
-                alt="Display case visual example"
-                loading="lazy"
-                onerror="this.src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=70';" />
+                   alt="Email/SMS visual example"
+                   loading="lazy"
+                   onerror="this.src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=70';" />
             </div>
             <div class="tileBody">
               <strong>Display Case</strong> get your brand in front of the customer.
@@ -778,11 +768,10 @@
 
           <article class="tile">
             <div class="tileMedia">
-              <img
-                src="https://media.lasvegasweekly.com/img/photos/2023/08/08/Best-Dispensary_Jardin_Courtesy_t610.jpg?64df38a0ccab41d6a38b286543429170b15bae0f"
-                alt="In-store TV screen visual example"
-                loading="lazy"
-                onerror="this.src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=70';" />
+              <img src="https://media.lasvegasweekly.com/img/photos/2023/08/08/Best-Dispensary_Jardin_Courtesy_t610.jpg?64df38a0ccab41d6a38b286543429170b15bae0f"
+                   alt="Display case visual example"
+                   loading="lazy"
+                   onerror="this.src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=70';" />
             </div>
             <div class="tileBody">
               <strong>In-store TV Screens</strong> impossible to ignore.
@@ -792,9 +781,9 @@
           <article class="tile">
             <div class="tileMedia">
               <img src="media/email-sms.jpg"
-                alt="Email/SMS visual example"
-                loading="lazy"
-                onerror="this.src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=70';" />
+                   alt="Email/SMS visual example"
+                   loading="lazy"
+                   onerror="this.src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=70';" />
             </div>
             <div class="tileBody">
               <strong>Email / SMS / App</strong> shoutouts designed to convert — not just “look nice.”
@@ -853,7 +842,6 @@
               frameborder="0"
               allow="autoplay; encrypted-media; picture-in-picture"
               allowfullscreen
-              style="width:100%;height:100%;border:0;"
             ></iframe>
           </div>
 
@@ -967,9 +955,8 @@
     const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
 
     // IMAGE PATH FALLBACK
-    const candidateSrcs = ["/images/hero.jpg", "/hero.jpg", "hero.jpg"];
+    const candidateSrcs = ["/images/hero.jpg", "/hero.jpg"];
     let srcIndex = 0;
-
     function tryLoadNextSrc(){
       if (srcIndex >= candidateSrcs.length) return;
       img.src = candidateSrcs[srcIndex++];
@@ -980,34 +967,24 @@
     function onScroll(){
       const rect = wrap.getBoundingClientRect();
       const vh = window.innerHeight;
-
-      // Main hero progress
       const p = clamp((-rect.top) / (vh * 0.75), 0, 1);
 
-      // Subtle zoom
       img.style.transform = `scale(${1.04 + p * 0.10})`;
 
-      // Glass intensifies
       glass.style.backdropFilter = `blur(${p * 18}px)`;
       glass.style.webkitBackdropFilter = `blur(${p * 18}px)`;
       glass.style.background = `rgba(255,255,255,${clamp(0.08 + p * 0.10, 0.08, 0.18)})`;
       glass.style.borderColor = `rgba(255,255,255,${clamp(0.18 + p * 0.22, 0.18, 0.40)})`;
       glass.style.transform = `translateY(${8 - p * 8}px)`;
 
-      // Buttons appear first
       if (p > 0.18) ctas.classList.add('show');
       else ctas.classList.remove('show');
 
-      // Blurb appears AFTER buttons (Apple-like “secondary reveal”)
-      // Tune the timing here if you want earlier/later:
-      if (p > 0.30) blurb.classList.add('show');
-      else blurb.classList.remove('show');
-
-      // Optional: slightly “track” the blurb opacity with scroll for extra smoothness
-      // (keeps the class for accessibility + reduced-motion)
-      const b = clamp((p - 0.30) / 0.25, 0, 1);
-      blurb.style.opacity = b;
-      blurb.style.transform = `translateY(${(1 - b) * 14}px)`;
+      // ✅ Reveal blurb later (feels Apple-like)
+      if (blurb){
+        if (p > 0.34) blurb.classList.add('show');
+        else blurb.classList.remove('show');
+      }
     }
 
     window.addEventListener('scroll', () => requestAnimationFrame(onScroll), { passive:true });
@@ -1024,46 +1001,6 @@
       btn.setAttribute("aria-label", isPlaying ? "Pause video" : "Play video");
     }
 
-    // Small tile video play/pause (only if you later add data-tile="video" tiles)
-    document.querySelectorAll('[data-tile="video"]').forEach(tile => {
-      const video = tile.querySelector('video');
-      const btn = tile.querySelector('.mediaControl');
-      if (!video || !btn) return;
-
-      setControlIcon(btn, false);
-
-      btn.addEventListener('click', () => {
-        if (video.paused){
-          document.querySelectorAll('[data-tile="video"]').forEach(t => {
-            const v = t.querySelector('video');
-            if (v && v !== video && !v.paused) v.pause();
-            t.classList.remove('isPlaying');
-          });
-
-          video.play().then(() => {
-            tile.classList.add('isPlaying');
-            setControlIcon(btn, true);
-          }).catch(() => {
-            tile.classList.remove('isPlaying');
-            setControlIcon(btn, false);
-          });
-        } else {
-          video.pause();
-          tile.classList.remove('isPlaying');
-          setControlIcon(btn, false);
-        }
-      });
-
-      video.addEventListener('pause', () => {
-        tile.classList.remove('isPlaying');
-        setControlIcon(btn, false);
-      });
-      video.addEventListener('play', () => {
-        tile.classList.add('isPlaying');
-        setControlIcon(btn, true);
-      });
-    });
-
     // Wide card video play/pause (Experiences + Entertainment)
     document.querySelectorAll('[data-wide="video"]').forEach(card => {
       const video = card.querySelector('video');
@@ -1074,7 +1011,6 @@
 
       btn.addEventListener('click', () => {
         if (video.paused){
-          // pause other wide videos
           document.querySelectorAll('[data-wide="video"] video').forEach(v => {
             if (v !== video && !v.paused) v.pause();
           });
@@ -1128,15 +1064,10 @@
 
     /* ==========================
        ✅ MARKETING IMPACT CALCULATOR LOGIC
-       Base: 547467
-       Add: 1200/day continuously
-       Does NOT reset (anchored to a fixed timestamp)
        ========================== */
     (function(){
-      const BASE_IMPRESSIONS = 547467; // <-- IMPORTANT: no commas in JS numbers
+      const BASE_IMPRESSIONS = 547467;
       const DAILY_ADD = 1200;
-
-      // Fixed anchor (prevents “reset”)
       const ANCHOR_ISO = "2025-12-23T00:00:00-08:00";
 
       const elValue = document.getElementById("impactValue");
