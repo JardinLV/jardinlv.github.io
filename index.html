@@ -186,45 +186,43 @@
       line-height: 1.55;
     }
 
-   /* ==============================
-   TAKE A CLOSER LOOK RAIL (Apple-like)
-   Desktop: 2-up
-   Mobile: swipe + peek
-   ============================== */
-.mediaRail{
-  display: grid;
-  grid-auto-flow: column;
-  gap: clamp(14px, 2vw, 22px);
+    /* ==============================
+       TAKE A CLOSER LOOK RAIL (Apple-like)
+       Desktop: 2-up
+       Mobile: swipe + peek
+       ============================== */
+    .mediaRail{
+      display: grid;
+      grid-auto-flow: column;
+      gap: clamp(14px, 2vw, 22px);
 
-  /* Desktop: show 2 tiles at once */
-  grid-auto-columns: calc((100% - clamp(14px, 2vw, 22px)) / 2);
+      /* Desktop: show 2 tiles at once */
+      grid-auto-columns: calc((100% - clamp(14px, 2vw, 22px)) / 2);
 
-  overflow-x: auto;
-  padding: 8px 2px 14px;
+      overflow-x: auto;
+      padding: 8px 2px 14px;
 
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-x: contain;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
 
-  /* makes the first card align nicely */
-  scroll-padding-left: 12px;
-}
+      scroll-padding-left: 12px;
+    }
 
-/* Apple hides scrollbars */
-.mediaRail::-webkit-scrollbar{ height: 0px; }
-.mediaRail{ scrollbar-width: none; }
+    /* Apple hides scrollbars */
+    .mediaRail::-webkit-scrollbar{ height: 0px; }
+    .mediaRail{ scrollbar-width: none; }
 
-/* Mobile: swipe with peek of next card */
-@media (max-width: 780px){
-  .mediaRail{
-    grid-auto-columns: 86%;      /* <-- peek */
-    gap: 14px;
-    padding-left: 12px;
-    padding-right: 18px;
-    scroll-padding-left: 12px;
-  }
-}
-
+    /* Mobile: swipe with peek of next card */
+    @media (max-width: 780px){
+      .mediaRail{
+        grid-auto-columns: 86%;
+        gap: 14px;
+        padding-left: 12px;
+        padding-right: 18px;
+        scroll-padding-left: 12px;
+      }
+    }
 
     /* Floating tile */
     .tile{
@@ -325,38 +323,6 @@
 
     .mediaControl svg{ width:18px; height:18px; fill:rgba(17,17,17,.78); }
 
-    /* ✅ Emotional tiles style (kept + cleaned) */
-    .tile.isEmotion .tileMedia{
-      min-height: 240px;
-      display:flex;
-      align-items:flex-end;
-      padding: 22px;
-      background:
-        radial-gradient(1200px 600px at 15% 15%, rgba(0,0,0,.06), transparent 60%),
-        radial-gradient(900px 500px at 85% 30%, rgba(0,0,0,.05), transparent 55%),
-        linear-gradient(180deg, rgba(245,245,247,1), rgba(255,255,255,1));
-    }
-    .tile.isEmotion .textKicker{
-      font-size: 13px;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: rgba(17,17,17,.55);
-      margin:0 0 10px;
-      font-weight: 800;
-    }
-    .tile.isEmotion .textHeadline{
-      margin:0;
-      font-size: clamp(20px, 2.4vw, 30px);
-      line-height: 1.12;
-      letter-spacing: -0.02em;
-      color: rgba(17,17,17,.92);
-      font-weight: 750;
-    }
-    .tile.isEmotion .textHeadline span{
-      color: rgba(17,17,17,.72);
-      font-weight: 520;
-    }
-
     /* rail wrapper + fades */
     .railWrap{ position:relative; }
 
@@ -456,6 +422,16 @@
       display:block;
       transform: scale(1);
       transition: transform .6s var(--easeApple);
+    }
+
+    /* ✅ Make YouTube iframe behave like the videos */
+    .wideMedia iframe{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      border:0;
+      display:block;
     }
 
     .wideBody{
@@ -618,11 +594,10 @@
     }
 
     /* Hide internal calculation details from visitors */
-.impactMetaRow,
-.impactFine{
-  display:none !important;
-}
-
+    .impactMetaRow,
+    .impactFine{
+      display:none !important;
+    }
 
     /* Mobile */
     @media (max-width: 900px){
@@ -636,16 +611,10 @@
 
     @media (max-width: 780px){
       .section{ padding: 56px 18px; }
-      .mediaRail{
-        grid-auto-columns: 86%;
-        gap: 14px;
-        scroll-padding-left: 18px;
-      }
       .railFade{ width: 36px; }
       .tile{ min-height: 380px; }
       .tileBody{ font-size: 17px; }
       .mediaControl{ opacity:1; transform:none; }
-      .tile.isEmotion .tileMedia{ min-height: 210px; }
       .impactCard{ padding: 16px 14px 14px; }
       .livePill{ padding: 8px 10px; }
     }
@@ -699,26 +668,26 @@
         <div class="mediaRail" id="mediaRail" aria-label="Media examples">
 
           <!-- ✅ YOUR MEDIA TILES -->
-
- <article class="tile">
+          <article class="tile">
             <div class="tileMedia">
               <img
-              src="https://images.squarespace-cdn.com/content/v1/5d15121d4a66b50001b6e714/1710284001887-CAETZ25KLR020QYN2NBN/JardinBillboards.jpg?format=1500w"
-              alt="Jardín billboards across Las Vegas"
-              loading="lazy"
-                />
-          </div>
-          <div class="tileBody">
-            <strong>Billboards</strong> that put your brand everywhere it matters in Las Vegas. Reaching over <strong>1.8 million impressions</strong> per placement.
-          </div>
-        </article>
+                src="https://images.squarespace-cdn.com/content/v1/5d15121d4a66b50001b6e714/1710284001887-CAETZ25KLR020QYN2NBN/JardinBillboards.jpg?format=1500w"
+                alt="Jardín billboards across Las Vegas"
+                loading="lazy"
+              />
+            </div>
+            <div class="tileBody">
+              <strong>Billboards</strong> that put your brand everywhere it matters in Las Vegas. Reaching over <strong>1.8 million impressions</strong> per placement.
+            </div>
+          </article>
 
           <article class="tile">
             <div class="tileMedia">
-              <img src="https://www.jardinlasvegas.com/wp-content/uploads/2023/01/6-23-01-juneteenth-1.jpg" 
-                alt="Display case photo example" 
+              <img
+                src="https://www.jardinlasvegas.com/wp-content/uploads/2023/01/6-23-01-juneteenth-1.jpg"
+                alt="Marquee example"
                 loading="lazy"
-                  />
+              />
             </div>
             <div class="tileBody">
               <strong>Marquee</strong> designed to influence customers before they reach the parking lot.
@@ -727,10 +696,12 @@
 
           <article class="tile">
             <div class="tileMedia">
-              <img src="media/email-sms.jpg" 
-                alt="Email/SMS visual example" 
+              <img
+                src="media/email-sms.jpg"
+                alt="Display case visual example"
                 loading="lazy"
-                   onerror="this.src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=70';" />
+                onerror="this.src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=70';"
+              />
             </div>
             <div class="tileBody">
               <strong>Display Case</strong> get your brand in front of the customer.
@@ -739,10 +710,12 @@
 
           <article class="tile">
             <div class="tileMedia">
-              <img src="https://media.lasvegasweekly.com/img/photos/2023/08/08/Best-Dispensary_Jardin_Courtesy_t610.jpg?64df38a0ccab41d6a38b286543429170b15bae0f" 
-                alt="Display case visual example" 
+              <img
+                src="https://media.lasvegasweekly.com/img/photos/2023/08/08/Best-Dispensary_Jardin_Courtesy_t610.jpg?64df38a0ccab41d6a38b286543429170b15bae0f"
+                alt="In-store TV screens"
                 loading="lazy"
-                   onerror="this.src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=70';" />
+                onerror="this.src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=70';"
+              />
             </div>
             <div class="tileBody">
               <strong>In-store TV Screens</strong> impossible to ignore.
@@ -751,10 +724,12 @@
 
           <article class="tile">
             <div class="tileMedia">
-              <img src="media/email-sms.jpg" 
-                alt="Email/SMS visual example" 
+              <img
+                src="media/email-sms.jpg"
+                alt="Email/SMS visual example"
                 loading="lazy"
-                   onerror="this.src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=70';" />
+                onerror="this.src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=70';"
+              />
             </div>
             <div class="tileBody">
               <strong>Email / SMS / App</strong> shoutouts designed to convert — not just “look nice.”
@@ -772,7 +747,7 @@
   <section id="experiences" class="section">
     <div class="sectionInner">
       <h2 class="sectionTitle">Experiences</h2>
-      
+
       <div class="wideRail">
         <article class="wideCard" data-wide="video">
           <div class="wideMedia">
@@ -804,24 +779,22 @@
           </div>
         </article>
 
-      <article class="wideCard" data-wide="video">
-  <div class="wideMedia">
-    <iframe
-      class="ytAuto"
-      src="https://www.youtube.com/embed/HHPrUIa9acc?enablejsapi=1&playsinline=1&mute=1&controls=0&rel=0"
-      title="Concerts Video"
-      frameborder="0"
-      allow="autoplay; encrypted-media; picture-in-picture"
-      allowfullscreen
-    ></iframe>
-  </div>
-
-  <div class="wideBody">
-    <p class="wideKicker">Energy</p>
-    <h3 class="wideTitle">Concerts</h3>
-    <p class="wideDesc">Brand moments with scale, designed to travel from venue to social.</p>
-  </div>
-</article>
+        <article class="wideCard" data-wide="video">
+          <div class="wideMedia">
+            <iframe
+              class="ytAuto"
+              src="https://www.youtube.com/embed/HHPrUIa9acc?enablejsapi=1&playsinline=1&mute=1&controls=0&rel=0"
+              title="Concerts Video"
+              allow="autoplay; encrypted-media; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          </div>
+          <div class="wideBody">
+            <p class="wideKicker">Energy</p>
+            <h3 class="wideTitle">Concerts</h3>
+            <p class="wideDesc">Brand moments with scale, designed to travel from venue to social.</p>
+          </div>
+        </article>
 
         <article class="wideCard" data-wide="video">
           <div class="wideMedia">
@@ -1074,11 +1047,9 @@
        Does NOT reset (anchored to a fixed timestamp)
        ========================== */
     (function(){
-      const BASE_IMPRESSIONS = 547,467;
+      const BASE_IMPRESSIONS = 547467;   // ✅ fixed (no comma)
       const DAILY_ADD = 1200;
 
-      // Set the anchor once. This is what prevents "reset".
-      // You can change the date/time, but keep it fixed afterward.
       const ANCHOR_ISO = "2025-12-23T00:00:00-08:00";
 
       const elValue = document.getElementById("impactValue");
@@ -1134,7 +1105,6 @@
     const iframes = Array.from(document.querySelectorAll("iframe.ytAuto"));
     if (!iframes.length) return;
 
-    // Helper to send commands to the YouTube player
     function ytCommand(iframe, func) {
       if (!iframe || !iframe.contentWindow) return;
       iframe.contentWindow.postMessage(
@@ -1143,19 +1113,16 @@
       );
     }
 
-    // Make sure the iframe is "ready" and muted (autoplay requires mute on most browsers)
     function prime(iframe) {
       ytCommand(iframe, "mute");
     }
 
-    // Play/pause based on visibility
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           const iframe = entry.target;
 
           if (entry.isIntersecting) {
-            // Prime + play
             prime(iframe);
             ytCommand(iframe, "playVideo");
           } else {
@@ -1163,21 +1130,16 @@
           }
         });
       },
-      {
-        // Tune this: higher = waits until more of the card is visible
-        threshold: 0.55
-      }
+      { threshold: 0.55 }
     );
 
     iframes.forEach((iframe) => observer.observe(iframe));
 
-    // Safety: pause when user switches tabs
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) iframes.forEach((f) => ytCommand(f, "pauseVideo"));
     });
   })();
-</script>
-
+  </script>
 
 </body>
 </html>
