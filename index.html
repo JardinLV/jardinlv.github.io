@@ -186,31 +186,45 @@
       line-height: 1.55;
     }
 
-    /* ==============================
-       TAKE A CLOSER LOOK RAIL
-       ============================== */
-    .mediaRail{
-      display:grid;
-      grid-auto-flow:column;
-      grid-auto-columns: clamp(280px, 42vw, 560px);
-      gap:18px;
-      overflow-x:auto;
-      padding: 8px 0 14px;
-      scroll-snap-type:x mandatory;
-      -webkit-overflow-scrolling:touch;
-      scroll-padding-left: 10px;
-      scrollbar-width: thin;
-    }
+   /* ==============================
+   TAKE A CLOSER LOOK RAIL (Apple-like)
+   Desktop: 2-up
+   Mobile: swipe + peek
+   ============================== */
+.mediaRail{
+  display: grid;
+  grid-auto-flow: column;
+  gap: clamp(14px, 2vw, 22px);
 
-    .mediaRail::-webkit-scrollbar{ height:10px; }
-    .mediaRail::-webkit-scrollbar-thumb{
-      background:rgba(0,0,0,.16);
-      border-radius:999px;
-    }
-    .mediaRail::-webkit-scrollbar-track{
-      background:rgba(0,0,0,.06);
-      border-radius:999px;
-    }
+  /* Desktop: show 2 tiles at once */
+  grid-auto-columns: calc((100% - clamp(14px, 2vw, 22px)) / 2);
+
+  overflow-x: auto;
+  padding: 8px 2px 14px;
+
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+
+  /* makes the first card align nicely */
+  scroll-padding-left: 12px;
+}
+
+/* Apple hides scrollbars */
+.mediaRail::-webkit-scrollbar{ height: 0px; }
+.mediaRail{ scrollbar-width: none; }
+
+/* Mobile: swipe with peek of next card */
+@media (max-width: 780px){
+  .mediaRail{
+    grid-auto-columns: 86%;      /* <-- peek */
+    gap: 14px;
+    padding-left: 12px;
+    padding-right: 18px;
+    scroll-padding-left: 12px;
+  }
+}
+
 
     /* Floating tile */
     .tile{
