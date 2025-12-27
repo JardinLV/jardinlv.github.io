@@ -157,6 +157,34 @@
       border:none;
     }
 
+    /* ✅ HERO BLURB (reveals on scroll under buttons) */
+    .heroBlurb{
+      margin-top: clamp(14px, 2vw, 18px);
+      max-width: 62ch;
+      pointer-events: none;
+    }
+
+    .heroBlurbLine{
+      margin: 0;
+      font-size: clamp(15px, 1.6vw, 18px);
+      line-height: 1.45;
+      color: rgba(255,255,255,.82);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity .45s var(--easeApple), transform .45s var(--easeApple);
+      will-change: opacity, transform;
+    }
+
+    .heroBlurbLine + .heroBlurbLine{
+      margin-top: 10px;
+      color: rgba(255,255,255,.74);
+    }
+
+    .heroBlurbLine.show{
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     /* ==============================
        SECTIONS
        ============================== */
@@ -209,11 +237,9 @@
       scroll-padding-left: 12px;
     }
 
-    /* Apple hides scrollbars */
     .mediaRail::-webkit-scrollbar{ height: 0px; }
     .mediaRail{ scrollbar-width: none; }
 
-    /* Mobile: swipe with peek of next card */
     @media (max-width: 780px){
       .mediaRail{
         grid-auto-columns: 86%;
@@ -245,7 +271,6 @@
       will-change: transform;
     }
 
-    /* Media area */
     .tileMedia{
       position:relative;
       flex:1 1 auto;
@@ -293,7 +318,6 @@
 
     .tile:active{ transform: translateY(-2px) scale(.99); }
 
-    /* play/pause button (small tiles) */
     .mediaControl{
       position:absolute;
       right:16px;
@@ -323,7 +347,37 @@
 
     .mediaControl svg{ width:18px; height:18px; fill:rgba(17,17,17,.78); }
 
-    /* rail wrapper + fades */
+    .tile.isEmotion .tileMedia{
+      min-height: 240px;
+      display:flex;
+      align-items:flex-end;
+      padding: 22px;
+      background:
+        radial-gradient(1200px 600px at 15% 15%, rgba(0,0,0,.06), transparent 60%),
+        radial-gradient(900px 500px at 85% 30%, rgba(0,0,0,.05), transparent 55%),
+        linear-gradient(180deg, rgba(245,245,247,1), rgba(255,255,255,1));
+    }
+    .tile.isEmotion .textKicker{
+      font-size: 13px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(17,17,17,.55);
+      margin:0 0 10px;
+      font-weight: 800;
+    }
+    .tile.isEmotion .textHeadline{
+      margin:0;
+      font-size: clamp(20px, 2.4vw, 30px);
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+      color: rgba(17,17,17,.92);
+      font-weight: 750;
+    }
+    .tile.isEmotion .textHeadline span{
+      color: rgba(17,17,17,.72);
+      font-weight: 520;
+    }
+
     .railWrap{ position:relative; }
 
     .railFade{
@@ -364,7 +418,6 @@
       z-index:0;
     }
 
-    /* dots */
     .railProgress{
       margin-top: 14px;
       display:flex;
@@ -387,9 +440,6 @@
       transform: scale(1.35);
     }
 
-    /* ==============================
-       EXPERIENCES + ENTERTAINMENT (WIDE VIDEO CARDS)
-       ============================== */
     .wideRail{
       display:grid;
       grid-auto-flow:row;
@@ -422,16 +472,6 @@
       display:block;
       transform: scale(1);
       transition: transform .6s var(--easeApple);
-    }
-
-    /* ✅ Make YouTube iframe behave like the videos */
-    .wideMedia iframe{
-      position:absolute;
-      inset:0;
-      width:100%;
-      height:100%;
-      border:0;
-      display:block;
     }
 
     .wideBody{
@@ -497,9 +537,6 @@
       }
     }
 
-    /* ==============================
-       ✅ MARKETING IMPACT CALCULATOR (Apple-clean)
-       ============================== */
     .impactCard{
       background:#fff;
       border:1px solid rgba(17,17,17,.08);
@@ -593,13 +630,11 @@
       line-height: 1.4;
     }
 
-    /* Hide internal calculation details from visitors */
     .impactMetaRow,
     .impactFine{
       display:none !important;
     }
 
-    /* Mobile */
     @media (max-width: 900px){
       .wideCard{ grid-template-columns: 1fr; }
       .wideBody{
@@ -611,10 +646,16 @@
 
     @media (max-width: 780px){
       .section{ padding: 56px 18px; }
+      .mediaRail{
+        grid-auto-columns: 86%;
+        gap: 14px;
+        scroll-padding-left: 18px;
+      }
       .railFade{ width: 36px; }
       .tile{ min-height: 380px; }
       .tileBody{ font-size: 17px; }
       .mediaControl{ opacity:1; transform:none; }
+      .tile.isEmotion .tileMedia{ min-height: 210px; }
       .impactCard{ padding: 16px 14px 14px; }
       .livePill{ padding: 8px 10px; }
     }
@@ -629,6 +670,10 @@
       .liveDot{ animation:none !important; }
       .ctaRow{ opacity:1 !important; }
       .mediaRail{ scroll-behavior:auto; }
+      .heroBlurbLine{
+        opacity: 1 !important;
+        transform: none !important;
+      }
     }
   </style>
 </head>
@@ -652,6 +697,16 @@
           <a class="btn btnPrimary" href="#packages">Take a closer look</a>
           <a class="btn" href="#contact">Contact</a>
         </div>
+
+        <!-- ✅ NEW: Scroll-reveal blurb under buttons -->
+        <div class="heroBlurb" id="heroBlurb" aria-hidden="true">
+          <p class="heroBlurbLine" data-line="0">
+            Jardín Marketing seamlessly blends physical presence with city-scale visibility.
+          </p>
+          <p class="heroBlurbLine" data-line="1">
+            So you can place your brand where attention lives, decisions happen, and demand is created.
+          </p>
+        </div>
       </div>
     </div>
   </section>
@@ -667,7 +722,6 @@
 
         <div class="mediaRail" id="mediaRail" aria-label="Media examples">
 
-          <!-- ✅ YOUR MEDIA TILES -->
           <article class="tile">
             <div class="tileMedia">
               <img
@@ -685,7 +739,7 @@
             <div class="tileMedia">
               <img
                 src="https://www.jardinlasvegas.com/wp-content/uploads/2023/01/6-23-01-juneteenth-1.jpg"
-                alt="Marquee example"
+                alt="Marquee photo example"
                 loading="lazy"
               />
             </div>
@@ -696,12 +750,10 @@
 
           <article class="tile">
             <div class="tileMedia">
-              <img
-                src="media/email-sms.jpg"
-                alt="Display case visual example"
+              <img src="media/email-sms.jpg"
+                alt="Email/SMS visual example"
                 loading="lazy"
-                onerror="this.src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=70';"
-              />
+                onerror="this.src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=70';" />
             </div>
             <div class="tileBody">
               <strong>Display Case</strong> get your brand in front of the customer.
@@ -712,10 +764,9 @@
             <div class="tileMedia">
               <img
                 src="https://media.lasvegasweekly.com/img/photos/2023/08/08/Best-Dispensary_Jardin_Courtesy_t610.jpg?64df38a0ccab41d6a38b286543429170b15bae0f"
-                alt="In-store TV screens"
+                alt="In-store TV screens visual example"
                 loading="lazy"
-                onerror="this.src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=70';"
-              />
+                onerror="this.src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=70';" />
             </div>
             <div class="tileBody">
               <strong>In-store TV Screens</strong> impossible to ignore.
@@ -724,12 +775,10 @@
 
           <article class="tile">
             <div class="tileMedia">
-              <img
-                src="media/email-sms.jpg"
+              <img src="media/email-sms.jpg"
                 alt="Email/SMS visual example"
                 loading="lazy"
-                onerror="this.src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=70';"
-              />
+                onerror="this.src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=70';" />
             </div>
             <div class="tileBody">
               <strong>Email / SMS / App</strong> shoutouts designed to convert — not just “look nice.”
@@ -785,10 +834,13 @@
               class="ytAuto"
               src="https://www.youtube.com/embed/HHPrUIa9acc?enablejsapi=1&playsinline=1&mute=1&controls=0&rel=0"
               title="Concerts Video"
+              frameborder="0"
               allow="autoplay; encrypted-media; picture-in-picture"
               allowfullscreen
+              style="width:100%;height:100%;border:0;"
             ></iframe>
           </div>
+
           <div class="wideBody">
             <p class="wideKicker">Energy</p>
             <h3 class="wideTitle">Concerts</h3>
@@ -853,7 +905,7 @@
     </div>
   </section>
 
-  <!-- ✅ MARKETING IMPACT (INSERTED HERE, BEFORE CONTACT) -->
+  <!-- ✅ MARKETING IMPACT -->
   <section id="impact" class="section">
     <div class="sectionInner">
       <h2 class="sectionTitle">Marketing Impact</h2>
@@ -894,6 +946,7 @@
     const img   = document.getElementById('heroImg');
     const glass = document.getElementById('glass');
     const ctas  = document.getElementById('ctaRow');
+    const blurb = document.getElementById('heroBlurb');
 
     const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
 
@@ -923,6 +976,22 @@
 
       if (p > 0.18) ctas.classList.add('show');
       else ctas.classList.remove('show');
+
+      // ✅ Reveal blurb lines during scroll (under the buttons)
+      if (blurb){
+        const lines = blurb.querySelectorAll('.heroBlurbLine');
+        const base = clamp((p - 0.22) / 0.40, 0, 1);
+
+        lines.forEach((line, i) => {
+          const t = clamp(base - i * 0.18, 0, 1);
+
+          if (t > 0.05) line.classList.add('show');
+          else line.classList.remove('show');
+
+          line.style.opacity = t.toFixed(3);
+          line.style.transform = `translateY(${(1 - t) * 10}px)`;
+        });
+      }
     }
     window.addEventListener('scroll', () => requestAnimationFrame(onScroll), { passive:true });
     window.addEventListener('resize', onScroll);
@@ -938,46 +1007,6 @@
       btn.setAttribute("aria-label", isPlaying ? "Pause video" : "Play video");
     }
 
-    // Small tile video play/pause
-    document.querySelectorAll('[data-tile="video"]').forEach(tile => {
-      const video = tile.querySelector('video');
-      const btn = tile.querySelector('.mediaControl');
-      if (!video || !btn) return;
-
-      setControlIcon(btn, false);
-
-      btn.addEventListener('click', () => {
-        if (video.paused){
-          document.querySelectorAll('[data-tile="video"]').forEach(t => {
-            const v = t.querySelector('video');
-            if (v && v !== video && !v.paused) v.pause();
-            t.classList.remove('isPlaying');
-          });
-
-          video.play().then(() => {
-            tile.classList.add('isPlaying');
-            setControlIcon(btn, true);
-          }).catch(() => {
-            tile.classList.remove('isPlaying');
-            setControlIcon(btn, false);
-          });
-        } else {
-          video.pause();
-          tile.classList.remove('isPlaying');
-          setControlIcon(btn, false);
-        }
-      });
-
-      video.addEventListener('pause', () => {
-        tile.classList.remove('isPlaying');
-        setControlIcon(btn, false);
-      });
-      video.addEventListener('play', () => {
-        tile.classList.add('isPlaying');
-        setControlIcon(btn, true);
-      });
-    });
-
     // Wide card video play/pause (Experiences + Entertainment)
     document.querySelectorAll('[data-wide="video"]').forEach(card => {
       const video = card.querySelector('video');
@@ -988,7 +1017,6 @@
 
       btn.addEventListener('click', () => {
         if (video.paused){
-          // pause other wide videos
           document.querySelectorAll('[data-wide="video"] video').forEach(v => {
             if (v !== video && !v.paused) v.pause();
           });
@@ -1042,14 +1070,10 @@
 
     /* ==========================
        ✅ MARKETING IMPACT CALCULATOR LOGIC
-       Base: 547,467
-       Add: 1,200/day continuously
-       Does NOT reset (anchored to a fixed timestamp)
        ========================== */
     (function(){
-      const BASE_IMPRESSIONS = 547467;   // ✅ fixed (no comma)
+      const BASE_IMPRESSIONS = 547467;
       const DAILY_ADD = 1200;
-
       const ANCHOR_ISO = "2025-12-23T00:00:00-08:00";
 
       const elValue = document.getElementById("impactValue");
@@ -1101,44 +1125,43 @@
   </script>
 
   <script>
-  (function () {
-    const iframes = Array.from(document.querySelectorAll("iframe.ytAuto"));
-    if (!iframes.length) return;
+    (function () {
+      const iframes = Array.from(document.querySelectorAll("iframe.ytAuto"));
+      if (!iframes.length) return;
 
-    function ytCommand(iframe, func) {
-      if (!iframe || !iframe.contentWindow) return;
-      iframe.contentWindow.postMessage(
-        JSON.stringify({ event: "command", func, args: [] }),
-        "*"
+      function ytCommand(iframe, func) {
+        if (!iframe || !iframe.contentWindow) return;
+        iframe.contentWindow.postMessage(
+          JSON.stringify({ event: "command", func, args: [] }),
+          "*"
+        );
+      }
+
+      function prime(iframe) {
+        ytCommand(iframe, "mute");
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            const iframe = entry.target;
+            if (entry.isIntersecting) {
+              prime(iframe);
+              ytCommand(iframe, "playVideo");
+            } else {
+              ytCommand(iframe, "pauseVideo");
+            }
+          });
+        },
+        { threshold: 0.55 }
       );
-    }
 
-    function prime(iframe) {
-      ytCommand(iframe, "mute");
-    }
+      iframes.forEach((iframe) => observer.observe(iframe));
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const iframe = entry.target;
-
-          if (entry.isIntersecting) {
-            prime(iframe);
-            ytCommand(iframe, "playVideo");
-          } else {
-            ytCommand(iframe, "pauseVideo");
-          }
-        });
-      },
-      { threshold: 0.55 }
-    );
-
-    iframes.forEach((iframe) => observer.observe(iframe));
-
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) iframes.forEach((f) => ytCommand(f, "pauseVideo"));
-    });
-  })();
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) iframes.forEach((f) => ytCommand(f, "pauseVideo"));
+      });
+    })();
   </script>
 
 </body>
