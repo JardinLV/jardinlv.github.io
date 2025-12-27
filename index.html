@@ -158,6 +158,101 @@
     }
 
     /* ==============================
+       ✅ APPLE-STYLE STICKY BLURB SECTION
+       ============================== */
+    .appleBlurbWrap{
+      background:#fff;
+      color:#111;
+      position:relative;
+      min-height:180vh; /* gives scroll room for the animation */
+      overflow:hidden;
+    }
+
+    .appleBlurbSticky{
+      position:sticky;
+      top:0;
+      height:100vh;
+      display:grid;
+      place-items:center;
+      padding:clamp(18px,4vw,56px);
+    }
+
+    .appleBlurbBg{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      transform:scale(1.08);
+      filter:blur(18px) saturate(1.05);
+      opacity:.35;
+      will-change:transform, opacity;
+    }
+
+    .appleBlurbWash{
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(1200px 700px at 50% 20%, rgba(255,255,255,.92), rgba(255,255,255,.66) 55%, rgba(255,255,255,.94)),
+        linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,1));
+      pointer-events:none;
+    }
+
+    .appleBlurbCard{
+      position:relative;
+      width:min(980px, 100%);
+      border-radius: 28px;
+      border: 1px solid rgba(17,17,17,.10);
+      background: rgba(255,255,255,.55);
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
+      box-shadow: 0 26px 90px rgba(0,0,0,.14);
+      padding: clamp(22px, 4vw, 44px);
+      transform: translateY(26px);
+      opacity: 0;
+      will-change: transform, opacity, backdrop-filter;
+      transition: opacity .35s var(--easeApple), transform .35s var(--easeApple), backdrop-filter .35s var(--easeApple);
+    }
+
+    .appleBlurbKicker{
+      font-size: 13px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color: rgba(17,17,17,.55);
+      font-weight: 850;
+      margin:0 0 14px;
+    }
+
+    .appleBlurbTitle{
+      margin:0;
+      font-size: clamp(34px, 5.2vw, 64px);
+      letter-spacing: -0.03em;
+      line-height: 1.06;
+      color: rgba(17,17,17,.94);
+    }
+
+    .appleBlurbP{
+      margin: 18px 0 0;
+      font-size: clamp(18px, 2.2vw, 28px);
+      line-height: 1.25;
+      color: rgba(17,17,17,.78);
+      max-width: 52ch;
+    }
+
+    .revealLine{
+      display:block;
+      opacity:0;
+      transform: translateY(18px);
+      transition: opacity .25s var(--easeApple), transform .25s var(--easeApple);
+      will-change: opacity, transform;
+    }
+
+    @media (max-width: 780px){
+      .appleBlurbCard{ border-radius: 24px; }
+      .appleBlurbP{ max-width: 40ch; }
+    }
+
+    /* ==============================
        SECTIONS
        ============================== */
     .section{
@@ -351,19 +446,6 @@
       );
     }
 
-    .railWrap::before{
-      content:"";
-      position:absolute;
-      left:0;
-      right:0;
-      bottom:-10px;
-      height:26px;
-      pointer-events:none;
-      background: radial-gradient(closest-side, rgba(0,0,0,.10), rgba(0,0,0,0));
-      opacity:.18;
-      z-index:0;
-    }
-
     /* dots */
     .railProgress{
       margin-top: 14px;
@@ -415,23 +497,13 @@
       min-height: 300px;
     }
 
-    .wideMedia video{
+    .wideMedia video,
+    .wideMedia iframe{
       width:100%;
       height:100%;
       object-fit:cover;
       display:block;
-      transform: scale(1);
-      transition: transform .6s var(--easeApple);
-    }
-
-    /* ✅ Make YouTube iframe behave like the videos */
-    .wideMedia iframe{
-      position:absolute;
-      inset:0;
-      width:100%;
-      height:100%;
       border:0;
-      display:block;
     }
 
     .wideBody{
@@ -485,17 +557,6 @@
       user-select:none;
     }
     .wideControl svg{ width:18px; height:18px; fill:rgba(255,255,255,.92); }
-
-    @media (hover:hover) and (pointer:fine){
-      .wideCard:hover{
-        transform: translateY(-6px);
-        box-shadow: var(--shadowHover);
-        border-color: rgba(17,17,17,.12);
-      }
-      .wideCard:hover .wideMedia video{
-        transform: scale(1.03);
-      }
-    }
 
     /* ==============================
        ✅ MARKETING IMPACT CALCULATOR (Apple-clean)
@@ -567,33 +628,6 @@
       margin: 6px 0 10px;
     }
 
-    .impactMetaRow{
-      display:flex;
-      justify-content:space-between;
-      align-items:baseline;
-      gap:16px;
-      flex-wrap:wrap;
-    }
-
-    .impactMeta{
-      color: rgba(17,17,17,.62);
-      font-size: 14px;
-      line-height: 1.35;
-      font-weight: 650;
-    }
-    .impactMeta span{
-      color: rgba(17,17,17,.92);
-      font-weight: 850;
-    }
-
-    .impactFine{
-      color: rgba(17,17,17,.52);
-      font-size: 12px;
-      margin-top: 10px;
-      line-height: 1.4;
-    }
-
-    /* Hide internal calculation details from visitors */
     .impactMetaRow,
     .impactFine{
       display:none !important;
@@ -609,26 +643,15 @@
       .wideMedia{ min-height: 260px; }
     }
 
-    @media (max-width: 780px){
-      .section{ padding: 56px 18px; }
-      .railFade{ width: 36px; }
-      .tile{ min-height: 380px; }
-      .tileBody{ font-size: 17px; }
-      .mediaControl{ opacity:1; transform:none; }
-      .impactCard{ padding: 16px 14px 14px; }
-      .livePill{ padding: 8px 10px; }
-    }
-
     @media (prefers-reduced-motion: reduce){
-      .heroBg img{ transform:none !important; }
+      .heroBg img, .appleBlurbBg{ transform:none !important; }
       .glass, .ctaRow, .tile, .tileMedia img, .tileMedia video, .mediaControl,
-      .wideCard, .wideMedia video{
+      .wideCard, .wideMedia video, .appleBlurbCard, .revealLine{
         transition:none !important;
         transform:none !important;
       }
       .liveDot{ animation:none !important; }
       .ctaRow{ opacity:1 !important; }
-      .mediaRail{ scroll-behavior:auto; }
     }
   </style>
 </head>
@@ -656,6 +679,29 @@
     </div>
   </section>
 
+  <!-- ✅ APPLE-STYLE SCROLL BLURB (NEW) -->
+  <section class="appleBlurbWrap" id="appleBlurb">
+    <div class="appleBlurbSticky">
+      <!-- background stays "still" because sticky container stays put -->
+      <img class="appleBlurbBg" id="appleBlurbBg" src="hero.jpg" alt="" aria-hidden="true" />
+      <div class="appleBlurbWash"></div>
+
+      <div class="appleBlurbCard" id="appleBlurbCard">
+        <p class="appleBlurbKicker">Jardín Marketing</p>
+
+        <h2 class="appleBlurbTitle">
+          <span class="revealLine" data-line="0">Jardín Marketing seamlessly blends</span>
+          <span class="revealLine" data-line="1">physical presence with city-scale visibility.</span>
+        </h2>
+
+        <p class="appleBlurbP">
+          <span class="revealLine" data-line="2">So you can place your brand where attention lives,</span>
+          <span class="revealLine" data-line="3">decisions happen, and demand is created.</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
   <!-- ===== TAKE A CLOSER LOOK ===== -->
   <section id="packages" class="section">
     <div class="sectionInner">
@@ -666,8 +712,6 @@
         <div class="railFade right"></div>
 
         <div class="mediaRail" id="mediaRail" aria-label="Media examples">
-
-          <!-- ✅ YOUR MEDIA TILES -->
           <article class="tile">
             <div class="tileMedia">
               <img
@@ -696,12 +740,10 @@
 
           <article class="tile">
             <div class="tileMedia">
-              <img
-                src="media/email-sms.jpg"
-                alt="Display case visual example"
+              <img src="media/email-sms.jpg"
+                alt="Display case example"
                 loading="lazy"
-                onerror="this.src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=70';"
-              />
+                onerror="this.src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=70';" />
             </div>
             <div class="tileBody">
               <strong>Display Case</strong> get your brand in front of the customer.
@@ -712,10 +754,9 @@
             <div class="tileMedia">
               <img
                 src="https://media.lasvegasweekly.com/img/photos/2023/08/08/Best-Dispensary_Jardin_Courtesy_t610.jpg?64df38a0ccab41d6a38b286543429170b15bae0f"
-                alt="In-store TV screens"
+                alt="In-store TV Screens example"
                 loading="lazy"
-                onerror="this.src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=70';"
-              />
+                onerror="this.src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=70';" />
             </div>
             <div class="tileBody">
               <strong>In-store TV Screens</strong> impossible to ignore.
@@ -724,18 +765,15 @@
 
           <article class="tile">
             <div class="tileMedia">
-              <img
-                src="media/email-sms.jpg"
+              <img src="media/email-sms.jpg"
                 alt="Email/SMS visual example"
                 loading="lazy"
-                onerror="this.src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=70';"
-              />
+                onerror="this.src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=70';" />
             </div>
             <div class="tileBody">
               <strong>Email / SMS / App</strong> shoutouts designed to convert — not just “look nice.”
             </div>
           </article>
-
         </div>
 
         <div class="railProgress" id="railProgress" aria-hidden="true"></div>
@@ -783,7 +821,7 @@
           <div class="wideMedia">
             <iframe
               class="ytAuto"
-              src="https://www.youtube.com/embed/HHPrUIa9acc?enablejsapi=1&playsinline=1&mute=1&controls=0&rel=0"
+              src="https://www.youtube.com/embed/HHPrUIa9acc?enablejsapi=1&playsinline=1&mute=1&autoplay=1&controls=0&rel=0&loop=1&playlist=HHPrUIa9acc"
               title="Concerts Video"
               allow="autoplay; encrypted-media; picture-in-picture"
               allowfullscreen
@@ -853,7 +891,7 @@
     </div>
   </section>
 
-  <!-- ✅ MARKETING IMPACT (INSERTED HERE, BEFORE CONTACT) -->
+  <!-- ✅ MARKETING IMPACT -->
   <section id="impact" class="section">
     <div class="sectionInner">
       <h2 class="sectionTitle">Marketing Impact</h2>
@@ -928,6 +966,56 @@
     window.addEventListener('resize', onScroll);
     onScroll();
 
+    /* ==========================
+       ✅ APPLE-STYLE BLURB ANIMATION
+       Sticky background + glass card reveal
+       ========================== */
+    (function(){
+      const section = document.getElementById("appleBlurb");
+      const card = document.getElementById("appleBlurbCard");
+      const bg = document.getElementById("appleBlurbBg");
+      const lines = Array.from(section.querySelectorAll(".revealLine"));
+
+      if (!section || !card) return;
+
+      function animate(){
+        const rect = section.getBoundingClientRect();
+        const vh = window.innerHeight;
+
+        // progress 0..1 while section is scrolling past viewport
+        const total = rect.height - vh;
+        const scrolled = clamp(-rect.top, 0, Math.max(1, total));
+        const p = clamp(scrolled / Math.max(1, total), 0, 1);
+
+        // Card reveal window
+        const cardIn = clamp((p - 0.12) / 0.28, 0, 1);
+        const blurAmt = 18 * cardIn;
+
+        card.style.opacity = cardIn.toFixed(3);
+        card.style.transform = `translateY(${(1 - cardIn) * 26}px)`;
+        card.style.backdropFilter = `blur(${blurAmt}px)`;
+        card.style.webkitBackdropFilter = `blur(${blurAmt}px)`;
+
+        // Background: subtle scale (keeps "still" feeling but premium)
+        if (bg){
+          bg.style.transform = `scale(${1.08 - p * 0.03})`;
+          bg.style.opacity = (0.35 + p * 0.10).toFixed(3);
+        }
+
+        // Line-by-line reveal
+        lines.forEach((el, i) => {
+          const start = 0.18 + i * 0.10;
+          const local = clamp((p - start) / 0.22, 0, 1);
+          el.style.opacity = local.toFixed(3);
+          el.style.transform = `translateY(${(1 - local) * 18}px)`;
+        });
+      }
+
+      window.addEventListener("scroll", () => requestAnimationFrame(animate), { passive:true });
+      window.addEventListener("resize", animate);
+      animate();
+    })();
+
     // shared icon toggle (works for both small + wide controls)
     function setControlIcon(btn, isPlaying){
       const play = btn.querySelector('[data-icon="play"]');
@@ -937,46 +1025,6 @@
       pause.style.display = isPlaying ? "block" : "none";
       btn.setAttribute("aria-label", isPlaying ? "Pause video" : "Play video");
     }
-
-    // Small tile video play/pause
-    document.querySelectorAll('[data-tile="video"]').forEach(tile => {
-      const video = tile.querySelector('video');
-      const btn = tile.querySelector('.mediaControl');
-      if (!video || !btn) return;
-
-      setControlIcon(btn, false);
-
-      btn.addEventListener('click', () => {
-        if (video.paused){
-          document.querySelectorAll('[data-tile="video"]').forEach(t => {
-            const v = t.querySelector('video');
-            if (v && v !== video && !v.paused) v.pause();
-            t.classList.remove('isPlaying');
-          });
-
-          video.play().then(() => {
-            tile.classList.add('isPlaying');
-            setControlIcon(btn, true);
-          }).catch(() => {
-            tile.classList.remove('isPlaying');
-            setControlIcon(btn, false);
-          });
-        } else {
-          video.pause();
-          tile.classList.remove('isPlaying');
-          setControlIcon(btn, false);
-        }
-      });
-
-      video.addEventListener('pause', () => {
-        tile.classList.remove('isPlaying');
-        setControlIcon(btn, false);
-      });
-      video.addEventListener('play', () => {
-        tile.classList.add('isPlaying');
-        setControlIcon(btn, true);
-      });
-    });
 
     // Wide card video play/pause (Experiences + Entertainment)
     document.querySelectorAll('[data-wide="video"]').forEach(card => {
@@ -988,7 +1036,6 @@
 
       btn.addEventListener('click', () => {
         if (video.paused){
-          // pause other wide videos
           document.querySelectorAll('[data-wide="video"] video').forEach(v => {
             if (v !== video && !v.paused) v.pause();
           });
@@ -1042,14 +1089,11 @@
 
     /* ==========================
        ✅ MARKETING IMPACT CALCULATOR LOGIC
-       Base: 547,467
-       Add: 1,200/day continuously
-       Does NOT reset (anchored to a fixed timestamp)
+       (FIXED: commas removed from number)
        ========================== */
     (function(){
-      const BASE_IMPRESSIONS = 547467;   // ✅ fixed (no comma)
+      const BASE_IMPRESSIONS = 547467;   // ✅ fixed
       const DAILY_ADD = 1200;
-
       const ANCHOR_ISO = "2025-12-23T00:00:00-08:00";
 
       const elValue = document.getElementById("impactValue");
@@ -1101,44 +1145,44 @@
   </script>
 
   <script>
-  (function () {
-    const iframes = Array.from(document.querySelectorAll("iframe.ytAuto"));
-    if (!iframes.length) return;
+    (function () {
+      const iframes = Array.from(document.querySelectorAll("iframe.ytAuto"));
+      if (!iframes.length) return;
 
-    function ytCommand(iframe, func) {
-      if (!iframe || !iframe.contentWindow) return;
-      iframe.contentWindow.postMessage(
-        JSON.stringify({ event: "command", func, args: [] }),
-        "*"
+      function ytCommand(iframe, func) {
+        if (!iframe || !iframe.contentWindow) return;
+        iframe.contentWindow.postMessage(
+          JSON.stringify({ event: "command", func, args: [] }),
+          "*"
+        );
+      }
+
+      function prime(iframe) {
+        ytCommand(iframe, "mute");
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            const iframe = entry.target;
+
+            if (entry.isIntersecting) {
+              prime(iframe);
+              ytCommand(iframe, "playVideo");
+            } else {
+              ytCommand(iframe, "pauseVideo");
+            }
+          });
+        },
+        { threshold: 0.55 }
       );
-    }
 
-    function prime(iframe) {
-      ytCommand(iframe, "mute");
-    }
+      iframes.forEach((iframe) => observer.observe(iframe));
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const iframe = entry.target;
-
-          if (entry.isIntersecting) {
-            prime(iframe);
-            ytCommand(iframe, "playVideo");
-          } else {
-            ytCommand(iframe, "pauseVideo");
-          }
-        });
-      },
-      { threshold: 0.55 }
-    );
-
-    iframes.forEach((iframe) => observer.observe(iframe));
-
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) iframes.forEach((f) => ytCommand(f, "pauseVideo"));
-    });
-  })();
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) iframes.forEach((f) => ytCommand(f, "pauseVideo"));
+      });
+    })();
   </script>
 
 </body>
