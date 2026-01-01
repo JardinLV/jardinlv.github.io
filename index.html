@@ -159,7 +159,6 @@
 
     /* ==============================
        ✅ APPLE-LIKE HERO BLURB (BIG TYPE)
-       Appears under buttons while scrolling
        ============================== */
     .heroBlurb{
       margin-top: clamp(16px, 2.4vw, 24px);
@@ -188,7 +187,6 @@
       font-size: clamp(18px, 2.2vw, 30px);
     }
 
-    /* When revealed */
     .heroBlurb.show{
       opacity: 1;
       transform: translateY(0);
@@ -224,25 +222,18 @@
     }
 
     /* ==============================
-       TAKE A CLOSER LOOK RAIL (Apple-like)
-       Desktop: 2-up
-       Mobile: swipe + peek
+       TAKE A CLOSER LOOK RAIL
        ============================== */
     .mediaRail{
       display: grid;
       grid-auto-flow: column;
       gap: clamp(14px, 2vw, 22px);
-
-      /* Desktop: show 2 tiles at once */
       grid-auto-columns: calc((100% - clamp(14px, 2vw, 22px)) / 2);
-
       overflow-x: auto;
       padding: 8px 2px 14px;
-
       scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
       overscroll-behavior-x: contain;
-
       scroll-padding-left: 12px;
     }
 
@@ -280,12 +271,21 @@
       will-change: transform;
     }
 
+    /* ==============================
+       ✅ MEDIA SIZING FIX (baked in)
+       - Default tiles: cinematic crop (cover)
+       - isBanner: wide graphics/collages → shorter + contain (no crop)
+       - isContain: portrait posters/UI → contain (no crop) using default height
+       ============================== */
     .tileMedia{
       position:relative;
-      flex:1 1 auto;
-      min-height:300px;
+      flex: 0 0 auto;
       background:transparent;
       overflow:hidden;
+
+      /* Default cinematic frame */
+      aspect-ratio: 16 / 10;
+      min-height: unset;
     }
 
     .tileMedia img,
@@ -293,10 +293,34 @@
       width:100%;
       height:100%;
       object-fit:cover;
+      object-position:center;
       display:block;
       transform: scale(1);
       transition: transform .6s var(--easeApple);
       will-change: transform;
+    }
+
+    /* ✅ Wide collages/banners: SHORTER + no crop */
+    .tile.isBanner .tileMedia{
+      aspect-ratio: 21 / 9;
+      background:#fff;
+    }
+    .tile.isBanner .tileMedia img,
+    .tile.isBanner .tileMedia video{
+      object-fit: contain;
+      transform: none;
+      transition: none;
+    }
+
+    /* ✅ Portrait posters / UI: no crop (contain) */
+    .tile.isContain .tileMedia{
+      background:#fff;
+    }
+    .tile.isContain .tileMedia img,
+    .tile.isContain .tileMedia video{
+      object-fit: contain;
+      transform: none;
+      transition: none;
     }
 
     .tileBody{
@@ -306,6 +330,7 @@
       line-height:1.25;
       border-top: 1px solid rgba(17,17,17,.06);
       background:#fff;
+      flex: 1 1 auto;
     }
     .tileBody strong{ color:#111; font-weight:700; }
 
@@ -319,6 +344,15 @@
       .tile:hover .tileMedia video{
         transform: scale(1.03);
       }
+
+      /* ✅ No hover zoom on contain/banners (prevents weird scaling) */
+      .tile.isBanner:hover .tileMedia img,
+      .tile.isBanner:hover .tileMedia video,
+      .tile.isContain:hover .tileMedia img,
+      .tile.isContain:hover .tileMedia video{
+        transform: none;
+      }
+
       .tile:hover .mediaControl{
         opacity:1;
         transform: translateY(0);
@@ -366,6 +400,7 @@
         radial-gradient(900px 500px at 85% 30%, rgba(0,0,0,.05), transparent 55%),
         linear-gradient(180deg, rgba(245,245,247,1), rgba(255,255,255,1));
     }
+
     .tile.isEmotion .textKicker{
       font-size: 13px;
       letter-spacing: .12em;
@@ -545,7 +580,7 @@
     }
 
     /* ==============================
-       ✅ MARKETING IMPACT CALCULATOR (Apple-clean)
+       ✅ MARKETING IMPACT CALCULATOR
        ============================== */
     .impactCard{
       background:#fff;
@@ -614,32 +649,6 @@
       margin: 6px 0 10px;
     }
 
-    .impactMetaRow{
-      display:flex;
-      justify-content:space-between;
-      align-items:baseline;
-      gap:16px;
-      flex-wrap:wrap;
-    }
-
-    .impactMeta{
-      color: rgba(17,17,17,.62);
-      font-size: 14px;
-      line-height: 1.35;
-      font-weight: 650;
-    }
-    .impactMeta span{
-      color: rgba(17,17,17,.92);
-      font-weight: 850;
-    }
-
-    .impactFine{
-      color: rgba(17,17,17,.52);
-      font-size: 12px;
-      margin-top: 10px;
-      line-height: 1.4;
-    }
-
     .impactMetaRow,
     .impactFine{
       display:none !important;
@@ -660,19 +669,17 @@
       .tile{ min-height: 380px; }
       .tileBody{ font-size: 17px; }
       .mediaControl{ opacity:1; transform:none; }
-      .tile.isEmotion .tileMedia{ min-height: 210px; }
       .impactCard{ padding: 16px 14px 14px; }
-      .livePill{ padding: 8px 10px; }
 
-      /* Make hero blurb feel Apple-big on phones too */
-      .heroBlurb{
-        max-width: 34ch;
-      }
+      .heroBlurb{ max-width: 34ch; }
       .heroBlurb p,
       .heroBlurb p + p{
         font-size: clamp(18px, 4.2vw, 24px);
         line-height: 1.15;
       }
+
+      /* Mobile: keep banner a bit less extreme but still shorter */
+      .tile.isBanner .tileMedia{ aspect-ratio: 18 / 9; }
     }
 
     @media (prefers-reduced-motion: reduce){
@@ -710,7 +717,6 @@
           <a class="btn" href="#contact">Contact</a>
         </div>
 
-        <!-- ✅ NEW: Apple-like blurb under buttons -->
         <div class="heroBlurb" id="heroBlurb" aria-label="Brand blurb">
           <p>Jardín Marketing seamlessly blends physical presence with city-scale visibility.</p>
           <p>So you can place your brand where attention lives, decisions happen, and demand is created.</p>
@@ -730,7 +736,8 @@
 
         <div class="mediaRail" id="mediaRail" aria-label="Media examples">
 
-          <article class="tile">
+          <!-- Wide collage/banner -->
+          <article class="tile isBanner">
             <div class="tileMedia">
               <img
                 src="https://images.squarespace-cdn.com/content/v1/5d15121d4a66b50001b6e714/1710284001887-CAETZ25KLR020QYN2NBN/JardinBillboards.jpg?format=1500w"
@@ -756,9 +763,9 @@
 
           <article class="tile">
             <div class="tileMedia">
-             <img src="media/display-case-instore.jpg"
-     alt="Display case photo example"
-     loading="lazy" />
+              <img src="media/display-case-instore.jpg"
+                   alt="Display case photo example"
+                   loading="lazy" />
             </div>
             <div class="tileBody">
               <strong>Display Case</strong> get your brand in front of the customer.
@@ -767,18 +774,19 @@
 
           <article class="tile">
             <div class="tileMedia">
-             <img src="media/instore-tv-screens.JPG"
-     alt="In-store TV screens inside Jardin"
-     loading="lazy" />
+              <img src="media/instore-tv-screens.JPG"
+                   alt="In-store TV screens inside Jardin"
+                   loading="lazy" />
             </div>
             <div class="tileBody">
               <strong>In-store TV Screens</strong> impossible to ignore.
             </div>
           </article>
 
-          <article class="tile">
+          <!-- Portrait/poster/UI creative: no crop -->
+          <article class="tile isContain">
             <div class="tileMedia">
-        <img src="media/email-sms-app.PNG"
+              <img src="media/email-sms-app.PNG"
                    alt="Email/SMS visual example"
                    loading="lazy"
                    onerror="this.src='https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=70';" />
@@ -801,26 +809,23 @@
       <h2 class="sectionTitle">Experiences</h2>
 
       <div class="wideRail">
-       <article class="wideCard" data-wide="video">
-  <div class="wideMedia">
-    <iframe
-      class="ytAuto"
-      src="https://www.youtube.com/embed/HtdrOQ5fZgE?enablejsapi=1&playsinline=1&mute=1&controls=0&rel=0&loop=1&playlist=HtdrOQ5fZgE"
-      title="Celebrity Budtender Meet & Greets"
-      frameborder="0"
-      allow="autoplay; encrypted-media; picture-in-picture"
-      allowfullscreen>
-    </iframe>
-  </div>
-
-  <div class="wideBody">
-    <p class="wideKicker">Influence</p>
-    <h3 class="wideTitle">Celebrity Budtender Meet & Greets</h3>
-    <p class="wideDesc">
-      High-touch moments that customers film, share, and remember.
-    </p>
-  </div>
-</article>
+        <article class="wideCard" data-wide="video">
+          <div class="wideMedia">
+            <iframe
+              class="ytAuto"
+              src="https://www.youtube.com/embed/HtdrOQ5fZgE?enablejsapi=1&playsinline=1&mute=1&controls=0&rel=0&loop=1&playlist=HtdrOQ5fZgE"
+              title="Celebrity Budtender Meet & Greets"
+              frameborder="0"
+              allow="autoplay; encrypted-media; picture-in-picture"
+              allowfullscreen>
+            </iframe>
+          </div>
+          <div class="wideBody">
+            <p class="wideKicker">Influence</p>
+            <h3 class="wideTitle">Celebrity Budtender Meet & Greets</h3>
+            <p class="wideDesc">High-touch moments that customers film, share, and remember.</p>
+          </div>
+        </article>
 
         <article class="wideCard" data-wide="video">
           <div class="wideMedia">
@@ -848,7 +853,6 @@
               allowfullscreen
             ></iframe>
           </div>
-
           <div class="wideBody">
             <p class="wideKicker">Energy</p>
             <h3 class="wideTitle">Concerts</h3>
@@ -856,26 +860,23 @@
           </div>
         </article>
 
-      <article class="wideCard" data-wide="video">
-  <div class="wideMedia">
-    <iframe
-      class="ytAuto"
-      src="https://www.youtube.com/embed/vheTcvZkmYY?enablejsapi=1&playsinline=1&mute=1&controls=0&rel=0&loop=1&playlist=vheTcvZkmYY"
-      title="MJBizCon After Party"
-      frameborder="0"
-      allow="autoplay; encrypted-media; picture-in-picture"
-      allowfullscreen
-    ></iframe>
-  </div>
-
-  <div class="wideBody">
-    <p class="wideKicker">Industry</p>
-    <h3 class="wideTitle">MJBizCon After Party</h3>
-    <p class="wideDesc">
-      A premium room for premium brands, where relationships become deals.
-    </p>
-  </div>
-</article>
+        <article class="wideCard" data-wide="video">
+          <div class="wideMedia">
+            <iframe
+              class="ytAuto"
+              src="https://www.youtube.com/embed/vheTcvZkmYY?enablejsapi=1&playsinline=1&mute=1&controls=0&rel=0&loop=1&playlist=vheTcvZkmYY"
+              title="MJBizCon After Party"
+              frameborder="0"
+              allow="autoplay; encrypted-media; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          </div>
+          <div class="wideBody">
+            <p class="wideKicker">Industry</p>
+            <h3 class="wideTitle">MJBizCon After Party</h3>
+            <p class="wideDesc">A premium room for premium brands, where relationships become deals.</p>
+          </div>
+        </article>
       </div>
     </div>
   </section>
@@ -886,26 +887,24 @@
       <h2 class="sectionTitle">Entertainment</h2>
 
       <div class="wideRail">
-       <article class="wideCard" data-wide="video">
-  <div class="wideMedia">
-    <iframe
-      class="ytAuto"
-      src="https://www.youtube.com/embed/-dEkUY09Mw0?enablejsapi=1&playsinline=1&mute=1&controls=0&rel=0&loop=1&playlist=-dEkUY09Mw0"
-      title="TV Commercials"
-      frameborder="0"
-      allow="autoplay; encrypted-media; picture-in-picture"
-      allowfullscreen
-    ></iframe>
-  </div>
+        <article class="wideCard" data-wide="video">
+          <div class="wideMedia">
+            <iframe
+              class="ytAuto"
+              src="https://www.youtube.com/embed/-dEkUY09Mw0?enablejsapi=1&playsinline=1&mute=1&controls=0&rel=0&loop=1&playlist=-dEkUY09Mw0"
+              title="TV Commercials"
+              frameborder="0"
+              allow="autoplay; encrypted-media; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          </div>
 
-  <div class="wideBody">
-    <p class="wideKicker">As seen on TV</p>
-    <h3 class="wideTitle">TV Commercials</h3>
-    <p class="wideDesc">
-      High-production storytelling that makes brands feel established and trusted.
-    </p>
-  </div>
-</article>
+          <div class="wideBody">
+            <p class="wideKicker">As seen on TV</p>
+            <h3 class="wideTitle">TV Commercials</h3>
+            <p class="wideDesc">High-production storytelling that makes brands feel established and trusted.</p>
+          </div>
+        </article>
 
         <article class="wideCard" data-wide="video">
           <div class="wideMedia">
@@ -925,7 +924,7 @@
     </div>
   </section>
 
-  <!-- ✅ MARKETING IMPACT (INSERTED HERE, BEFORE CONTACT) -->
+  <!-- ✅ MARKETING IMPACT -->
   <section id="impact" class="section">
     <div class="sectionInner">
       <h2 class="sectionTitle">Marketing Impact</h2>
@@ -996,7 +995,6 @@
       if (p > 0.18) ctas.classList.add('show');
       else ctas.classList.remove('show');
 
-      // ✅ Reveal blurb later (feels Apple-like)
       if (blurb){
         if (p > 0.34) blurb.classList.add('show');
         else blurb.classList.remove('show');
@@ -1007,7 +1005,7 @@
     window.addEventListener('resize', onScroll);
     onScroll();
 
-    // shared icon toggle (works for both small + wide controls)
+    // shared icon toggle
     function setControlIcon(btn, isPlaying){
       const play = btn.querySelector('[data-icon="play"]');
       const pause = btn.querySelector('[data-icon="pause"]');
@@ -1017,7 +1015,7 @@
       btn.setAttribute("aria-label", isPlaying ? "Pause video" : "Play video");
     }
 
-    // Wide card video play/pause (Experiences + Entertainment)
+    // Wide card video play/pause
     document.querySelectorAll('[data-wide="video"]').forEach(card => {
       const video = card.querySelector('video');
       const btn = card.querySelector('.wideControl');
@@ -1078,9 +1076,7 @@
     rail?.addEventListener('scroll', () => requestAnimationFrame(setActiveDot), { passive:true });
     window.addEventListener('resize', () => { buildDots(); setActiveDot(); });
 
-    /* ==========================
-       ✅ MARKETING IMPACT CALCULATOR LOGIC
-       ========================== */
+    /* ✅ MARKETING IMPACT CALCULATOR */
     (function(){
       const BASE_IMPRESSIONS = 547467;
       const DAILY_ADD = 1200;
