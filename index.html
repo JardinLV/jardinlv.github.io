@@ -32,17 +32,23 @@
 
     *{ box-sizing:border-box; }
 
+    /* ✅ FIX #2: Pure white page background (no grey band) */
     body{
       margin:0;
       font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-      background:#000;
-      color:#fff;
+      background:var(--pageBg);
+      color:var(--pageText);
     }
 
     a{ color:inherit; text-decoration:none; }
 
     /* ===== HERO WRAP ===== */
-    .heroWrap{ min-height:170vh; position:relative; }
+    .heroWrap{
+      min-height:170vh;
+      position:relative;
+      background:#000; /* keeps hero “cinematic” */
+      color:#fff;
+    }
 
     /* ===== STICKY BACKGROUND ===== */
     .heroBg{
@@ -235,6 +241,7 @@
       -webkit-overflow-scrolling: touch;
       overscroll-behavior-x: contain;
       scroll-padding-left: 12px;
+      scroll-behavior:smooth;
     }
 
     .mediaRail::-webkit-scrollbar{ height: 0px; }
@@ -282,8 +289,6 @@
       flex: 0 0 auto;
       background:transparent;
       overflow:hidden;
-
-      /* Default cinematic frame */
       aspect-ratio: 16 / 10;
       min-height: unset;
     }
@@ -345,7 +350,6 @@
         transform: scale(1.03);
       }
 
-      /* ✅ No hover zoom on contain/banners (prevents weird scaling) */
       .tile.isBanner:hover .tileMedia img,
       .tile.isBanner:hover .tileMedia video,
       .tile.isContain:hover .tileMedia img,
@@ -390,38 +394,6 @@
 
     .mediaControl svg{ width:18px; height:18px; fill:rgba(17,17,17,.78); }
 
-    .tile.isEmotion .tileMedia{
-      min-height: 240px;
-      display:flex;
-      align-items:flex-end;
-      padding: 22px;
-      background:
-        radial-gradient(1200px 600px at 15% 15%, rgba(0,0,0,.06), transparent 60%),
-        radial-gradient(900px 500px at 85% 30%, rgba(0,0,0,.05), transparent 55%),
-        linear-gradient(180deg, rgba(245,245,247,1), rgba(255,255,255,1));
-    }
-
-    .tile.isEmotion .textKicker{
-      font-size: 13px;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: rgba(17,17,17,.55);
-      margin:0 0 10px;
-      font-weight: 800;
-    }
-    .tile.isEmotion .textHeadline{
-      margin:0;
-      font-size: clamp(20px, 2.4vw, 30px);
-      line-height: 1.12;
-      letter-spacing: -0.02em;
-      color: rgba(17,17,17,.92);
-      font-weight: 750;
-    }
-    .tile.isEmotion .textHeadline span{
-      color: rgba(17,17,17,.72);
-      font-weight: 520;
-    }
-
     .railWrap{ position:relative; }
 
     .railFade{
@@ -449,39 +421,58 @@
       );
     }
 
-    .railWrap::before{
-      content:"";
-      position:absolute;
-      left:0;
-      right:0;
-      bottom:-10px;
-      height:26px;
-      pointer-events:none;
-      background: radial-gradient(closest-side, rgba(0,0,0,.10), rgba(0,0,0,0));
-      opacity:.18;
-      z-index:0;
+    /* ✅ FIX #2: remove the grey “shadow band” under the rail */
+    .railWrap::before{ display:none; }
+
+    /* ==============================
+       ✅ FIX #1: Apple-style arrows (replace dots)
+       ============================== */
+    .railNav{
+      margin-top: 18px;
+      display:flex;
+      justify-content:flex-end;
+      gap:14px;
+      align-items:center;
     }
 
-    .railProgress{
-      margin-top: 14px;
-      display:flex;
-      gap:8px;
-      align-items:center;
-      justify-content:flex-start;
-      position: relative;
-      z-index: 1;
-    }
-    .dot{
-      width:6px;
-      height:6px;
+    .railArrow{
+      width:56px;
+      height:56px;
       border-radius:999px;
-      background: rgba(17,17,17,.14);
-      transform: scale(1);
-      transition: transform .25s var(--easeApple), background .25s var(--easeApple);
+      border:0;
+      background: rgba(0,0,0,.06);
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      transition: transform .18s var(--easeOut), background .18s var(--easeOut), opacity .18s var(--easeOut);
+      user-select:none;
     }
-    .dot.active{
-      background: rgba(17,17,17,.45);
-      transform: scale(1.35);
+
+    .railArrow:active{ transform: scale(.98); }
+
+    .railArrow svg{
+      width:20px;
+      height:20px;
+      stroke: rgba(17,17,17,.75);
+      stroke-width: 3.2;
+      fill:none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .railArrow.isDisabled{
+      opacity:.35;
+      cursor:default;
+      pointer-events:none;
+    }
+
+    .railArrow.isActive{
+      background: rgba(0,0,0,.10);
+    }
+
+    @media (max-width: 780px){
+      .railNav{ justify-content:center; }
+      .railArrow{ width:54px; height:54px; }
     }
 
     /* ==============================
@@ -678,7 +669,6 @@
         line-height: 1.15;
       }
 
-      /* Mobile: keep banner a bit less extreme but still shorter */
       .tile.isBanner .tileMedia{ aspect-ratio: 18 / 9; }
     }
 
@@ -736,10 +726,10 @@
 
         <div class="mediaRail" id="mediaRail" aria-label="Media examples">
 
-          <!-- Wide collage/banner -->
-          <article class="tile">
+          <!-- ✅ Billboards: make it match others by using isBanner -->
+          <article class="tile isBanner">
             <div class="tileMedia">
-             <img src="media/jardin-billboards.jpg"
+              <img src="media/jardin-billboards.jpg"
                    alt="Jardín billboards across Las Vegas"
                    loading="lazy" />
             </div>
@@ -781,7 +771,6 @@
             </div>
           </article>
 
-          <!-- Portrait/poster/UI creative: no crop -->
           <article class="tile isContain">
             <div class="tileMedia">
               <img src="media/email-sms-app.PNG"
@@ -796,7 +785,20 @@
 
         </div>
 
-        <div class="railProgress" id="railProgress" aria-hidden="true"></div>
+        <!-- ✅ Apple arrows (replaces dots) -->
+        <div class="railNav" aria-label="Carousel controls">
+          <button class="railArrow" id="railPrev" type="button" aria-label="Previous">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M14.5 6.5L9 12l5.5 5.5"></path>
+            </svg>
+          </button>
+          <button class="railArrow" id="railNext" type="button" aria-label="Next">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M9.5 6.5L15 12l-5.5 5.5"></path>
+            </svg>
+          </button>
+        </div>
+
       </div>
     </div>
   </section>
@@ -1037,42 +1039,44 @@
       video.addEventListener('play', () => setControlIcon(btn, true));
     });
 
-    // Rail Progress Dots
+    /* ✅ Apple arrow controls for the media rail */
     const rail = document.getElementById('mediaRail');
-    const progress = document.getElementById('railProgress');
+    const prevBtn = document.getElementById('railPrev');
+    const nextBtn = document.getElementById('railNext');
 
-    function buildDots(){
-      if (!rail || !progress) return;
-      progress.innerHTML = "";
-      const tiles = Array.from(rail.querySelectorAll('.tile'));
-
-      const maxDots = 6;
-      const step = Math.ceil(tiles.length / maxDots);
-      const dotCount = Math.min(maxDots, Math.ceil(tiles.length / step));
-
-      for (let i = 0; i < dotCount; i++){
-        const d = document.createElement('div');
-        d.className = "dot";
-        progress.appendChild(d);
-      }
+    function stepSize(){
+      const first = rail?.querySelector('.tile');
+      if (!first) return rail.clientWidth * 0.85;
+      const styles = window.getComputedStyle(rail);
+      const gap = parseFloat(styles.columnGap || styles.gap || "0") || 0;
+      return first.getBoundingClientRect().width + gap;
     }
 
-    function setActiveDot(){
-      if (!rail || !progress) return;
-      const dots = Array.from(progress.querySelectorAll('.dot'));
-      if (!dots.length) return;
-
+    function updateRailButtons(){
+      if (!rail || !prevBtn || !nextBtn) return;
       const maxScroll = rail.scrollWidth - rail.clientWidth;
-      const t = maxScroll <= 0 ? 0 : rail.scrollLeft / maxScroll;
-      const idx = Math.round(t * (dots.length - 1));
+      const left = rail.scrollLeft;
 
-      dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+      const atStart = left <= 2;
+      const atEnd = left >= (maxScroll - 2);
+
+      prevBtn.classList.toggle('isDisabled', atStart);
+      nextBtn.classList.toggle('isDisabled', atEnd);
+
+      prevBtn.classList.toggle('isActive', !atStart);
+      nextBtn.classList.toggle('isActive', !atEnd);
     }
 
-    buildDots();
-    setActiveDot();
-    rail?.addEventListener('scroll', () => requestAnimationFrame(setActiveDot), { passive:true });
-    window.addEventListener('resize', () => { buildDots(); setActiveDot(); });
+    function scrollRail(dir){
+      if (!rail) return;
+      rail.scrollBy({ left: dir * stepSize(), behavior: 'smooth' });
+    }
+
+    prevBtn?.addEventListener('click', () => scrollRail(-1));
+    nextBtn?.addEventListener('click', () => scrollRail(1));
+    rail?.addEventListener('scroll', () => requestAnimationFrame(updateRailButtons), { passive:true });
+    window.addEventListener('resize', () => requestAnimationFrame(updateRailButtons));
+    updateRailButtons();
 
     /* ✅ MARKETING IMPACT CALCULATOR */
     (function(){
