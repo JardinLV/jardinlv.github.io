@@ -417,7 +417,7 @@
       width:44px;
       height:44px;
       border-radius:999px;
-      border:1px solid rgba(17,17,17,.14);
+      border:0;
       background:rgba(255,255,255,.86);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
@@ -949,7 +949,11 @@
   <section id="impact" class="section">
     <div class="sectionInner">
       <h2 class="sectionTitle">Marketing Impact</h2>
-      <p class="sectionSub">A live, always-growing counter that updates continuously.</p>
+
+      <!-- ✅ UPDATED: only adds the “since opening” line; nothing else changes -->
+      <p class="sectionSub" style="margin-top:8px;">
+        Live cumulative impressions since opening.
+      </p>
 
       <div class="impactCard">
         <div class="impactTop">
@@ -957,7 +961,16 @@
           <div class="livePill"><span class="liveDot"></span>LIVE</div>
         </div>
 
-        <div id="impactValue" class="impactValue">547,467</div>
+        <!-- ✅ UPDATED: now driven by data- attributes (still only shows the number) -->
+        <div
+          id="impactValue"
+          class="impactValue live-counter"
+          aria-live="polite"
+          data-start-date="2017-11-11T00:00:00-08:00"
+          data-rate-per-day="45992"
+          data-initial="0"
+          data-decimals="0"
+        >0</div>
 
         <div class="impactMetaRow">
           <div class="impactMeta">Base: <span id="impactBase">547,467</span></div>
@@ -1099,57 +1112,69 @@
     window.addEventListener('resize', () => requestAnimationFrame(updateRailButtons));
     updateRailButtons();
 
-    /* ✅ MARKETING IMPACT CALCULATOR */
+    /* ✅ MARKETING IMPACT CALCULATOR (UPDATED: uses live-counter attributes; shows only the number) */
     (function(){
-      const BASE_IMPRESSIONS = 547467;
-      const DAILY_ADD = 1200;
-      const ANCHOR_ISO = "2025-12-23T00:00:00-08:00";
+      function clamp2(n, min, max){ return Math.max(min, Math.min(max, n)); }
 
-      const elValue = document.getElementById("impactValue");
-      const elBase = document.getElementById("impactBase");
-      const elDaily = document.getElementById("impactDaily");
-
-      if (!elValue || !elBase || !elDaily) return;
-
-      elBase.textContent = BASE_IMPRESSIONS.toLocaleString("en-US");
-      elDaily.textContent = DAILY_ADD.toLocaleString("en-US");
-
-      const PER_SECOND = DAILY_ADD / 86400;
-      let currentDisplayed = BASE_IMPRESSIONS;
-
-      function getLiveValue(){
-        const anchor = new Date(ANCHOR_ISO).getTime();
-        const now = Date.now();
-        const secondsElapsed = Math.max(0, (now - anchor) / 1000);
-        return Math.floor(BASE_IMPRESSIONS + secondsElapsed * PER_SECOND);
+      function formatNumber(n, decimals){
+        return n.toLocaleString("en-US", {
+          minimumFractionDigits: decimals,
+          maximumFractionDigits: decimals
+        });
       }
 
-      function tweenTo(target){
-        const start = currentDisplayed;
-        const diff = target - start;
-        if (diff === 0) return;
+      function initLiveCounter(el){
+        const startISO = el.getAttribute("data-start-date");
+        const ratePerDay = parseFloat(el.getAttribute("data-rate-per-day") || "0") || 0;
+        const initial = parseFloat(el.getAttribute("data-initial") || "0") || 0;
+        const decimals = parseInt(el.getAttribute("data-decimals") || "0", 10);
 
-        const duration = 650;
-        const t0 = performance.now();
+        if (!startISO || !ratePerDay) return;
 
-        function tick(t){
-          const p = Math.min(1, (t - t0) / duration);
-          const eased = 1 - Math.pow(1 - p, 3);
-          const v = Math.floor(start + diff * eased);
-          elValue.textContent = v.toLocaleString("en-US");
-          if (p < 1) requestAnimationFrame(tick);
-          else currentDisplayed = target;
+        const perSecond = ratePerDay / 86400;
+        const startMs = new Date(startISO).getTime();
+
+        let currentDisplayed = initial;
+
+        function getLiveValue(){
+          const now = Date.now();
+          const secondsElapsed = Math.max(0, (now - startMs) / 1000);
+          return initial + (secondsElapsed * perSecond);
         }
-        requestAnimationFrame(tick);
+
+        function tweenTo(target){
+          const start = currentDisplayed;
+          const diff = target - start;
+          if (Math.abs(diff) < 0.0001) return;
+
+          const duration = 650;
+          const t0 = performance.now();
+
+          function tick(t){
+            const p = clamp2((t - t0) / duration, 0, 1);
+            const eased = 1 - Math.pow(1 - p, 3);
+            const v = start + diff * eased;
+
+            const display = (decimals === 0) ? Math.floor(v) : v;
+            el.textContent = formatNumber(display, decimals);
+
+            if (p < 1) requestAnimationFrame(tick);
+            else currentDisplayed = target;
+          }
+          requestAnimationFrame(tick);
+        }
+
+        const first = getLiveValue();
+        el.textContent = formatNumber(decimals === 0 ? Math.floor(first) : first, decimals);
+        currentDisplayed = first;
+
+        (function loop(){
+          tweenTo(getLiveValue());
+          setTimeout(loop, 1500);
+        })();
       }
 
-      function loop(){
-        tweenTo(getLiveValue());
-        setTimeout(loop, 1500);
-      }
-
-      elValue.textContent = currentDisplayed.toLocaleString("en-US");
-      loop();
+      document.querySelectorAll(".live-counter").forEach(initLiveCounter);
     })();
   </script>
 
