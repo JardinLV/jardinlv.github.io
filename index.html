@@ -7,13 +7,13 @@
 
   <meta name="description" content="Jardín Marketing Packages offer premium creative, media, and placement solutions designed to elevate cannabis brands with refined, design-forward execution." />
 
-<meta property="og:type" content="website" />
-<meta property="og:title" content="Jardín Marketing Packages" />
-<meta property="og:description" content="Premium marketing packages designed to elevate cannabis brands through design, media, and placement." />
-<meta property="og:image" content="https://jardinlv.github.io/media/jardin-humidor-light.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Jardín Marketing Packages" />
+  <meta property="og:description" content="Premium marketing packages designed to elevate cannabis brands through design, media, and placement." />
+  <meta property="og:image" content="https://jardinlv.github.io/media/jardin-humidor-light.png" />
 
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content="https://jardinlv.github.io/media/jardin-humidor-light.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://jardinlv.github.io/media/jardin-humidor-light.png" />
 
   <style>
     :root{
@@ -39,7 +39,7 @@
       /* LIVE accent */
       --liveRed: #e11d48;
 
-      /* ✅ NEW: content + gutter used for Apple-style full-bleed rail */
+      /* ✅ content + gutter used for Apple-style full-bleed rail */
       --contentMax: 1180px;                 /* matches .sectionInner max-width */
       --gutter: clamp(16px, 4vw, 56px);     /* matches your section padding */
     }
@@ -236,17 +236,14 @@
 
     .railWrap{
       position:relative;
-
       width: 100vw;
       margin-left: calc(50% - 50vw);
 
-      /* ✅ FIX: let the rail itself be full-bleed, but give the SCROLLER real left padding
-         so the first tile can slide fully into view (no "cut off" like your screenshot). */
       padding-left: 0;
       padding-right: 0;
 
       padding-bottom: 84px;
-      background: #fff; /* ✅ add THIS line */
+      background: #fff;
     }
 
     .railFade{ display:none !important; }
@@ -259,13 +256,11 @@
       padding-top: 8px;
       padding-bottom: 14px;
 
-      /* ✅ FIX: REAL left padding (this is what prevents the left tile from being clipped) */
       padding-left: max(
         var(--gutter),
         calc((100vw - var(--contentMax)) / 2 + var(--gutter))
       );
 
-      /* ✅ keep the Apple "peek" on the right */
       padding-right: max(14vw, var(--gutter));
 
       scroll-snap-type: x mandatory;
@@ -344,12 +339,12 @@
     }
 
     .tileMedia iframe{
-  width:100%;
-  height:100%;
-  display:block;
-  border:0;
-}
-    
+      width:100%;
+      height:100%;
+      display:block;
+      border:0;
+    }
+
     .tile.isBanner .tileMedia{
       aspect-ratio: 21 / 9;
       background:#fff;
@@ -693,6 +688,39 @@
       .heroBlurb{ opacity:1 !important; transform:none !important; }
       .mediaRail{ scroll-behavior:auto; }
     }
+
+    /* ==============================
+       ✅ FOOTER — Powered by CBI Analytics
+       ============================== */
+    .siteFooter{
+      padding: 28px 0;
+      border-top: 1px solid rgba(17,17,17,.08);
+      background: var(--pageBg);
+    }
+
+    .footerInner{
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 clamp(18px,4vw,56px);
+      display: flex;
+      justify-content: center;
+    }
+
+    .poweredBy{
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: rgba(17,17,17,.55);
+      letter-spacing: .02em;
+    }
+
+    .cbiLogo{
+      height: 8px;
+      width: auto;
+      opacity: .75;
+      transform: translateY(0.5px);
+    }
   </style>
 </head>
 
@@ -788,7 +816,6 @@
             </div>
           </article>
 
-          <!-- ✅ ADDED: Jardín University (YouTube autoplay on scroll, muted) -->
           <article class="tile isContain">
             <div class="tileMedia">
               <iframe
@@ -801,7 +828,7 @@
               </iframe>
             </div>
             <div class="tileBody">
-      <strong>Jardín University</strong> featuring top budtenders and <em>Forbes</em> contributors.
+              <strong>Jardín University</strong> featuring top budtenders and <em>Forbes</em> contributors.
             </div>
           </article>
 
@@ -1084,14 +1111,9 @@
     window.addEventListener('resize', () => requestAnimationFrame(updateRailButtons));
     updateRailButtons();
 
-    /* ✅ MARKETING IMPACT CALCULATOR (Veterans Day 2016 → today, ~1.4M/mo ≈ 46k/day) */
     (function(){
       const BASE_IMPRESSIONS = 0;
-
-      /* 1.4M per month ≈ 46k per day (matches your other site's “45k/day” vibe) */
       const DAILY_ADD = 46000;
-
-      /* Veterans Day 9 years ago (from 2026): 2016-11-11 */
       const ANCHOR_ISO = "2016-11-11T00:00:00-08:00";
 
       const elValue = document.getElementById("impactValue");
@@ -1181,6 +1203,22 @@
       });
     })();
   </script>
+
+  <!-- ✅ FOOTER (added) -->
+  <footer class="siteFooter">
+    <div class="footerInner">
+      <span class="poweredBy">
+        Powered by
+        <img
+          src="./media/cbi-logo.png"
+          alt="CBI Analytics"
+          class="cbiLogo"
+          loading="lazy"
+        />
+        CBI Analytics
+      </span>
+    </div>
+  </footer>
 
 </body>
 </html>
