@@ -28,6 +28,10 @@
 
       /* LIVE accent */
       --liveRed: #e11d48;
+
+      /* ✅ NEW: content + gutter used for Apple-style full-bleed rail */
+      --contentMax: 1180px;                 /* matches .sectionInner max-width */
+      --gutter: clamp(16px, 4vw, 56px);     /* matches your section padding */
     }
 
     *{ box-sizing:border-box; }
@@ -229,37 +233,81 @@
 
     /* ==============================
        TAKE A CLOSER LOOK RAIL
+       ✅ UPDATED to Apple Vision Pro behavior:
+       1) no gradient edge fades
+       2) arrows bottom-right inside railWrap
+       3) rail full-bleed + tiles “expand/peek” to the right (desktop + mobile)
        ============================== */
+
+    /* ✅ Full-bleed rail (lets tiles extend beyond section width on the right) */
+    .railWrap{
+      position:relative;
+
+      width: 100vw;
+      margin-left: calc(50% - 50vw);
+
+      /* keep left edge aligned with section content */
+      padding-left: max(
+        var(--gutter),
+        calc((100vw - var(--contentMax)) / 2 + var(--gutter))
+      );
+      padding-right: var(--gutter);
+
+      padding-bottom: 84px; /* space for arrows */
+    }
+
+    /* ✅ remove the edge gradients completely */
+    .railFade{ display:none !important; }
+    .railWrap::before{ display:none; }
+
+    /* ✅ Switch rail from grid-columns to flex (more Apple-like + predictable widths) */
     .mediaRail{
-      display: grid;
-      grid-auto-flow: column;
+      display:flex;
       gap: clamp(14px, 2vw, 22px);
-      grid-auto-columns: calc((100% - clamp(14px, 2vw, 22px)) / 2);
       overflow-x: auto;
       padding: 8px 2px 14px;
       scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
       overscroll-behavior-x: contain;
-      scroll-padding-left: 12px;
       scroll-behavior:smooth;
+
+      /* ✅ starts aligned to content */
+      scroll-padding-left: max(
+        var(--gutter),
+        calc((100vw - var(--contentMax)) / 2 + var(--gutter))
+      );
+
+      /* ✅ the “expand to the right” feel */
+      padding-right: 14vw;
     }
 
     .mediaRail::-webkit-scrollbar{ height: 0px; }
     .mediaRail{ scrollbar-width: none; }
 
+    /* Tile widths tuned to Apple peek behavior */
+    .mediaRail .tile{
+      scroll-snap-align:start;
+      flex: 0 0 auto;
+      width: 720px;  /* desktop default */
+    }
+
+    @media (max-width: 900px){
+      .mediaRail{ padding-right: 18vw; }
+      .mediaRail .tile{ width: min(86vw, 640px); }
+    }
+
     @media (max-width: 780px){
       .mediaRail{
-        grid-auto-columns: 86%;
         gap: 14px;
-        padding-left: 12px;
-        padding-right: 18px;
-        scroll-padding-left: 12px;
+        padding-right: 22vw; /* more peek on mobile */
+      }
+      .mediaRail .tile{
+        width: min(88vw, 620px);
       }
     }
 
-    /* Floating tile */
+    /* Floating tile (unchanged styling) */
     .tile{
-      scroll-snap-align:start;
       background:var(--cardBg);
       border:1px solid var(--cardStroke);
       border-radius:var(--tileRadius);
@@ -280,9 +328,6 @@
 
     /* ==============================
        ✅ MEDIA SIZING FIX (baked in)
-       - Default tiles: cinematic crop (cover)
-       - isBanner: wide graphics/collages → shorter + contain (no crop)
-       - isContain: portrait posters/UI → contain (no crop) using default height
        ============================== */
     .tileMedia{
       position:relative;
@@ -394,45 +439,18 @@
 
     .mediaControl svg{ width:18px; height:18px; fill:rgba(17,17,17,.78); }
 
-    .railWrap{ position:relative; }
-
-    .railFade{
-      pointer-events:none;
-      position:absolute;
-      top:0;
-      bottom:0;
-      width:52px;
-      z-index:3;
-    }
-    .railFade.left{
-      left:0;
-      background: linear-gradient(90deg,
-        rgba(255,255,255,1) 0%,
-        rgba(255,255,255,.85) 35%,
-        rgba(255,255,255,0) 100%
-      );
-    }
-    .railFade.right{
-      right:0;
-      background: linear-gradient(270deg,
-        rgba(255,255,255,1) 0%,
-        rgba(255,255,255,.85) 35%,
-        rgba(255,255,255,0) 100%
-      );
-    }
-
-    /* ✅ FIX #2: remove the grey “shadow band” under the rail */
-    .railWrap::before{ display:none; }
-
     /* ==============================
-       ✅ FIX #1: Apple-style arrows (replace dots)
+       ✅ Apple-style arrows (bottom-right over the rail)
        ============================== */
     .railNav{
-      margin-top: 18px;
+      position:absolute;
+      right: var(--gutter);
+      bottom: 16px;
       display:flex;
-      justify-content:flex-end;
       gap:14px;
       align-items:center;
+      justify-content:flex-end;
+      z-index: 5;
     }
 
     .railArrow{
@@ -471,7 +489,10 @@
     }
 
     @media (max-width: 780px){
-      .railNav{ justify-content:center; }
+      .railNav{
+        right: 18px;
+        bottom: 14px;
+      }
       .railArrow{ width:46px; height:46px; }
     }
 
@@ -656,7 +677,6 @@
 
     @media (max-width: 780px){
       .section{ padding: 56px 18px; }
-      .railFade{ width: 36px; }
       .tile{ min-height: 380px; }
       .tileBody{ font-size: 17px; }
       .mediaControl{ opacity:1; transform:none; }
@@ -721,13 +741,14 @@
       <h2 class="sectionTitle">Take a closer look.</h2>
 
       <div class="railWrap">
+        <!-- ✅ railFade removed (CSS hides them if left here) -->
         <div class="railFade left"></div>
         <div class="railFade right"></div>
 
         <div class="mediaRail" id="mediaRail" aria-label="Media examples">
 
           <!-- ✅ Billboards: make it match others by using isBanner -->
-           <article class="tile">
+          <article class="tile isBanner">
             <div class="tileMedia">
               <img src="media/jardin-billboards.jpg"
                    alt="Jardín billboards across Las Vegas"
@@ -785,7 +806,7 @@
 
         </div>
 
-        <!-- ✅ Apple arrows (replaces dots) -->
+        <!-- ✅ Apple arrows: now bottom-right inside the railWrap -->
         <div class="railNav" aria-label="Carousel controls">
           <button class="railArrow" id="railPrev" type="button" aria-label="Previous">
             <svg viewBox="0 0 24 24" aria-hidden="true">
