@@ -519,12 +519,22 @@
     }
 
     /* ✅ NEW: Make wide images behave EXACTLY like wide videos/iframes */
-    .wideMedia img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-    }
+    /* ✅ Wide images behave EXACTLY like wide videos/iframes */
+.wideMedia{
+  position: relative;
+  overflow: hidden;
+  min-height: 300px; /* matches video frames */
+}
+
+.wideMedia > img{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 
     .wideBody{
       padding:22px 22px 24px;
